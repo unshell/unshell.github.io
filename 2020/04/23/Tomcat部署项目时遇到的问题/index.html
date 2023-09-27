@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="芬奇的博客">
+    <meta name="keyword" content="">
+    <link rel="shortcut icon" href="/blog/image/favicon.svg">
+
+    <title>
+        
+        Tomcat 部署项目时遇到的问题 - 芬奇的博客 | Finch&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/blog/css/main.css?v=1023">
+    <!-- Icon CSS -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2103599_gii1mr7u70l.css" type="text/css">
+</head>
+<body>
+    <div class="site-nav-toggle" id="site-nav-toggle">
+        <button><i class="iconfont icon-menu1"></i></button>
+    </div>
+
+    <div class="index-about">
+        <i> 我相信所有坚韧不拔的努力，迟早会得来好报酬 </i>
+    </div>
+
+    <div class="index-container">
+        
+        <div class="index-left">
+            <div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/blog/image/avatar.jpeg" />
+        </div>
+        <div class="name">
+            <i>芬奇</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/blog/">
+                    <i class="iconfont icon-home-"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/blog/tags">
+                    <i class="iconfont icon-tags"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/blog/archive">
+                    <i class="iconfont icon-guidang"></i>
+                    <span>归档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/blog/about/">
+                    <i class="iconfont icon-guanyu"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a href="javascript:void(0)" id="search">
+                    <i class="iconfont icon-sousuo-2"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Unable-to-add-the-resource"><span class="toc-text">1.Unable to add the resource</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-naming-namingContextCreationFailed"><span class="toc-text">2.naming.namingContextCreationFailed</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-至少有一个JAR被扫描用于TLD但尚未包含TLD。"><span class="toc-text">3.至少有一个JAR被扫描用于TLD但尚未包含TLD。</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"><i class="iconfont icon-chacha"></i></span>
+            <input type="text" id="search-input" autocomplete="off" placeholder="Search" />
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container"></div>
+    </div>
+</div>
+            <div class="index-about-mobile">
+                <i> 我相信所有坚韧不拔的努力，迟早会得来好报酬 </i>
+            </div>
+        </div>
+        
+        <div class="index-middle">
+            <!-- Main Content -->
+            <div class="post-container">
+    <div class="post-title">
+        Tomcat 部署项目时遇到的问题
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-04-23</span></span>
+        
+        <span class="attr">标签：/
+            
+            <a class="tag" href="/blog/tags/#Tomcat" title="Tomcat">Tomcat</a>
+            <span>/</span>
+            
+            <a class="tag" href="/blog/tags/#Bug" title="Bug">Bug</a>
+            <span>/</span>
+            
+            
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+        </span>
+        </span>
+    </div>
+    <div class="post-content ">
+        <h2 id="1-Unable-to-add-the-resource"><a href="#1-Unable-to-add-the-resource" class="headerlink" title="1.Unable to add the resource"></a>1.Unable to add the resource</h2><blockquote>
+<p>org.apache.catalina.webresources.Cache.getResource Unable to add the resource</p>
+</blockquote>
+<p><strong>原因：</strong>资源缓存空间不足，得配置更大的资源缓存空间</p>
+<p><strong>解决方法：</strong>修改 Tomcat 文件夹下 conf 文件中的 context.xml 文件，添加内容如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Context</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">Resources</span> <span class="attr">cachingAllowed</span>=<span class="string">"true"</span> <span class="attr">cacheMaxSize</span>=<span class="string">"150000"</span> &gt;</span><span class="tag">&lt;/<span class="name">Resources</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-naming-namingContextCreationFailed"><a href="#2-naming-namingContextCreationFailed" class="headerlink" title="2.naming.namingContextCreationFailed"></a>2.naming.namingContextCreationFailed</h2><blockquote>
+<p>org.apache.catalina.core.NamingContextListener.lifecycleEvent naming.namingContextCreationFailed</p>
+</blockquote>
+<p><strong>原因</strong>：命名监听器创建失败</p>
+<h3 id="3-至少有一个JAR被扫描用于TLD但尚未包含TLD。"><a href="#3-至少有一个JAR被扫描用于TLD但尚未包含TLD。" class="headerlink" title="3.至少有一个JAR被扫描用于TLD但尚未包含TLD。"></a>3.至少有一个JAR被扫描用于TLD但尚未包含TLD。</h3><blockquote>
+<p>org.apache.jasper.servlet.TldScanner.scanJars 至少有一个JAR被扫描用于TLD但尚未包含TLD。 为此记录器启用调试日志记录，以获取已扫描但未在其中找到TLD的完整JAR列表。 在扫描期间跳过不需要的JAR可以缩短启动时间和JSP编译时间。</p>
+</blockquote>
+<p><strong>等级：</strong>警告</p>
+<p><strong>解决方法:</strong></p>
+<p><strong>1.修改 Tomcat 文件夹下 conf 文件夹中 logging.properties 文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 输出被扫描TLD的Jar包的列表</span><br><span class="line">org.apache.jasper.servlet.TldScanner.level = FINE</span><br></pre></td></tr></table></figure>
+<p><strong>2.重新运行 Tomcat ，日志输出扫描的Jar包</strong></p>
+<p><strong>3.修改 Tomcat 文件夹下 conf 文件夹中 catalina.properties 文件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"># Default list of JAR files that should not be scanned using the JarScanner</span><br><span class="line"># functionality. This is typically used to scan JARs for configuration</span><br><span class="line"># information. JARs that do not contain such information may be excluded from</span><br><span class="line"># the scan to speed up the scanning process. This is the default list. JARs on</span><br><span class="line"># this list are excluded from all scans. The list must be a comma separated list</span><br><span class="line"># of JAR file names.</span><br><span class="line"># The list of JARs to skip may be over-ridden at a Context level for individual</span><br><span class="line"># scan types by configuring a JarScanner with a nested JarScanFilter.</span><br><span class="line"># The JARs listed below include:</span><br><span class="line"># - Tomcat Bootstrap JARs</span><br><span class="line"># - Tomcat API JARs</span><br><span class="line"># - Catalina JARs</span><br><span class="line"># - Jasper JARs</span><br><span class="line"># - Tomcat JARs</span><br><span class="line"># - Common non-Tomcat JARs</span><br><span class="line"># - Test JARs (JUnit, Cobertura and dependencies)</span><br><span class="line">tomcat.util.scan.StandardJarScanFilter.jarsToSkip=\</span><br><span class="line">annotations-api.jar,\ant-junit*.jar,\ant-launcher.jar,\</span><br><span class="line">ant.jar,\asm-*.jar,\aspectj*.jar,\bootstrap.jar,\catalina-ant.jar,\catalina-ha.jar,\</span><br><span class="line">catalina-ssi.jar,\catalina-storeconfig.jar,\catalina-tribes.jar,\catalina.jar,\cglib-*.jar,\</span><br><span class="line">cobertura-*.jar,\commons-beanutils*.jar,\commons-codec*.jar,\commons-collections*.jar,\</span><br><span class="line">commons-daemon.jar,\commons-dbcp*.jar,\commons-digester*.jar,\</span><br><span class="line">commons-fileupload*.jar,\commons-httpclient*.jar,\commons-io*.jar,\commons-lang*.jar,\</span><br><span class="line">commons-logging*.jar,\commons-math*.jar,\commons-pool*.jar,\dom4j-*.jar,\easymock-*.jar,\</span><br><span class="line">ecj-*.jar,\el-api.jar,\geronimo-spec-jaxrpc*.jar,\h2*.jar,\hamcrest-*.jar,\hibernate*.jar,\</span><br><span class="line">httpclient*.jar,\icu4j-*.jar,\jasper-el.jar,\jasper.jar,\jaspic-api.jar,\jaxb-*.jar,\</span><br><span class="line">jaxen-*.jar,\jdom-*.jar,\jetty-*.jar,\jmx-tools.jar,\jmx.jar,\jsp-api.jar,\jstl.jar,\</span><br><span class="line">jta*.jar,\junit-*.jar,\junit.jar,\log4j*.jar,\mail*.jar,\objenesis-*.jar,\oraclepki.jar,\</span><br><span class="line">oro-*.jar,\servlet-api-*.jar,\servlet-api.jar,\slf4j*.jar,\taglibs-standard-spec-*.jar,\</span><br><span class="line">tagsoup-*.jar,\tomcat-api.jar,\tomcat-coyote.jar,\tomcat-dbcp.jar,\tomcat-i18n-*.jar,\</span><br><span class="line">tomcat-jdbc.jar,\tomcat-jni.jar,\tomcat-juli-adapters.jar,\tomcat-juli.jar,\tomcat-util-scan.jar,\</span><br><span class="line">tomcat-util.jar,\tomcat-websocket.jar,\tools.jar,\websocket-api.jar,\wsdl4j*.jar,\xercesImpl.jar,\</span><br><span class="line">xml-apis.jar,\xmlParserAPIs-*.jar,\xmlParserAPIs.jar,\xom-*.jar</span><br><span class="line"># 将要跳过扫描的包在后面添加</span><br><span class="line"># 例子：mysql-connector-*.jar,\</span><br><span class="line"># 注意以 ,\ 分隔</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+        </div>
+    </div>
+
+    <footer class="footer">
+    <ul class="list-inline text-center">
+        
+        <li>
+            <a target="_blank" href="https://github.com/unshell">
+                <span class="fa-stack fa-lg">
+                    <i class="iconfont icon-github"></i>
+                </span>
+            </a>
+        </li>
+        
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="https://hexo.io/zh-cn/">Hexo</a></span>
+        <span>/</span>
+        
+        <span><a href="http://niexiaotao.cn/">AirCloud</a></span>
+        <span>/</span>
+        
+        <span><a href="https://www.iconfont.cn/">Alibaba Icon</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>@ 2018 - 2020 UnShell</p>
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+    </p>
+</footer>
+</body>
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json";
+    window.hexo_root = "/blog/";
+    window.isPost = true;
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/blog/js/index.js?v=1023"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+</html>
