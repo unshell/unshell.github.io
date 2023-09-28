@@ -89,7 +89,7 @@
     <div class="search-container">
         <div class="search-input">
             <span id="esc-search"><i class="iconfont icon-chacha"></i></span>
-            <input type="text" id="search-input" autocomplete="off" placeholder="Search" />
+            <input type="text" id="search-input" autocomplete="off" placeholder="输入关键字搜索" />
             <span id="begin-search">搜索</span>
         </div>
         <div class="search-result-container" id="search-result-container"></div>
@@ -141,7 +141,7 @@
 <p>很明显第一次进来<code>apps.length === 0</code>和下面的<code>if ( config.modules[item] )</code> 也必为 false ，那么我们直接移步到 else 内。</p>
 <p>创建一个 script 元素并赋予属性和模块的地址，通过 appendChild 追加到 head 之后留下一个 addEventListener 监听 script 的加载（ ps：attachEvent 是给非人类使用的浏览器准备的 ）并将开始创建的<code>function onScriptLoad(e, url)</code>函数抛进去，然后整段代码除了<code>return that</code>到这里戛然而止。</p>
 <p>再来看看<code>function onScriptLoad(e, url)</code>函数，首先开幕雷击<code>&quot;PLaySTATION 3&quot; === navigator.platform</code> ？</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/13907412-625b822bf78d91c1.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Layui 的业务已经发展到PS3上了吗？"></p>
+<p>Layui 的业务已经发展到PS3上了吗？</p>
 <p>仅关心PC端浏览器的部分<code>e.type === &#39;load&#39;</code>， 因为监听的是 <strong>load</strong> 所以这里必为 <strong>true</strong> 并执行<code>config.modules[item] = url</code>后将追加的 script 元素移除。剩余的代码就是动态加载时使用的技巧，直到<code>config.status[item]</code> 为 <strong>true</strong> 时循环结束。</p>
 <h3 id="定义模块"><a href="#定义模块" class="headerlink" title="定义模块"></a>定义模块</h3><p>由于<code>config.status[item]</code>不会自动变成 <strong>true</strong>，之后的骚操作由 <strong>layui.define</strong> 接手。</p>
 <p>先看官方文档：</p>
