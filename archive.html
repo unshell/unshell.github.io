@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>归档</title>
+    <link rel="shortcut icon" href="/assets/icon/favicon.svg">
+    <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+
+<body>
+    <article class="white">
+        <header>
+            <i>我相信所有坚韧不拔的努力，迟早会得来好报酬</i>
+        </header>
+        <div class="nav">
+            <a href="/">博客</a>
+            <a href="/tags.html">标签</a>
+            <a class="active" href="/archive.html">归档</a>
+            <a href="/about.html">关于</a>
+        </div>
+        <div class="archives">
+            <p class="loading">加载中...</p>
+        </div>
+        <footer>2024 &copy;FINCH BLOG</footer>
+    </article>
+    <!-- js part -->
+    <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script>
+        true && issues(function (data) {
+            // 处理标签
+            for (var i = 0, tags = []; i < data.length; i++) {
+                // 获取日期
+                data[i].created_date = data[i].created_at.split('T')[0];
+
+                if (!tags.includes(data[i].created_date)) {
+                    tags.push(data[i].created_date);
+                }
+            }
+
+            // 处理文章
+            for (var i = 0, archive = {}; i < tags.length; i++) {
+                archive[tags[i]] = [];
+                for (var j = 0; j < data.length; j++) {
+                    if (data[j].created_date == tags[i]) {
+                        archive[tags[i]].push(data[j]);
+                    }
+                }
+            }
+
+            // 处理归档
+            for (var key in archive) {
+                $('.archives').append(['<div class="archive">',
+                    '<div class="seperator">' + key.split('-')[0] + '</div>',
+                    '<ul>',
+                    archive[key].map(function (item) {
+                        // 获取日期
+                        item.created_date = item.created_date.split('-');
+                        return '<li><span>' + item.created_date[1] + '-' + item.created_date[2] + '</span><a href="/post.html?number=' + item.number + '">' + item.title + '</a></li>';
+                    }).join(''),
+                    '</ul>',
+                    '</div>'
+                ].join(''));
+            }
+
+            // 加载层
+            loading(true);
+        });
+    </script>
+</body>
+
+</html>

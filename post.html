@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>...</title>
+    <link rel="shortcut icon" href="/assets/icon/favicon.svg">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/content.css">
+</head>
+
+<body>
+    <article class="white">
+        <header>
+            <i>我相信所有坚韧不拔的努力，迟早会得来好报酬</i>
+        </header>
+        <div class="article">
+            <p class="loading">加载中...</p>
+        </div>
+        <footer>2024 &copy;FINCH BLOG</footer>
+    </article>
+    <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/libs/marked.min.js"></script>
+    <script src="/assets/js/api.js"></script>
+    <script>
+        $(document).ready(function () {
+            true && issue(function (data) {
+                // 获取日期
+                data.created_date = data.created_at.split('T')[0];
+                // 处理标签
+                data.tags = data.labels.map(function (item) {
+                    return '<span>' + item.name + '</span>';
+                });
+                // 处理内容，将 markdown 格式转换为 html 格式
+                data.body = marked.parse(data.body);
+                // 插入 html
+                $('div.article').html(['<div class="title">' + data.title + '</div>',
+                    '<p class="info">', 'issue created at <i>' + data.created_date + '</i>·' + data.tags.join(''), '</p>',
+                    '<div class="content">', data.body, '</div>'
+                ].join(''));
+                // 加载层
+                loading(true);
+                // 修改标题
+                document.title = data.title;
+            }, params().number);
+        });
+    </script>
+</body>
+
+</html>
