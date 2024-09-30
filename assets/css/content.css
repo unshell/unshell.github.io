@@ -82,6 +82,7 @@
 .content td,
 .content th {
     padding: 8px;
+    text-align: left;
 }
 
 .content thead {
