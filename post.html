@@ -24,7 +24,10 @@
     <script src="/assets/libs/marked.min.js"></script>
     <script src="/assets/js/api.js"></script>
     <script>
+        // 设置主题
+        setTheme();
         $(document).ready(function () {
+            // 加载内容
             true && issue(function (data) {
                 // 获取日期
                 data.created_date = data.created_at.split('T')[0];

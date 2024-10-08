@@ -38,7 +38,7 @@
     margin-left: 0px;
     margin-right: 0px;
     border-left: 3px solid var(--theme-color);
-    background-color: #f9f9f9;
+    background-color: var(--pre-background-color);
 }
 
 .content ul,
@@ -64,7 +64,7 @@
     padding: 16px;
     overflow: auto;
     line-height: 1.45;
-    background-color: #f6f8fa;
+    background-color: var(--pre-background-color);
     border-radius: 6px;
     border: 1px solid #ededed;
 }
@@ -75,8 +75,12 @@
     border-collapse: collapse;
 }
 
+.content table>tbody>tr {
+    background-color: var(--table-tbody-tr);
+}
+
 .content table>tbody>tr:nth-of-type(odd) {
-    background-color: #fbfbfb;
+    background-color: var(--table-tbody-tr-odd);
 }
 
 .content td,
