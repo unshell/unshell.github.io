@@ -55,16 +55,16 @@ function setTheme() {
         theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? 'black' : 'white';
         localStorage.setItem('theme', theme);
     }
-    var $icon = $('svg[data-theme="' + theme + '"]');
+    var $icon = $('i[data-theme="' + theme + '"]');
     $('body').removeClass().addClass(theme);
-    $('svg.icon').removeClass('active');
+    $('i.iconfont').removeClass('active');
     $icon.addClass('active');
 }
 
 /* Document click */
-$(document).on('click', 'svg.icon', function () {
-    var $this = $(this), $sibling = $this.siblings('svg.icon'), data = $sibling.data(), theme = data.theme;
-    $this.removeClass('active').siblings('svg.icon').addClass('active');
+$(document).on('click', 'i.iconfont', function () {
+    var $this = $(this), $sibling = $this.siblings('i.iconfont'), data = $sibling.data(), theme = data.theme;
+    $this.removeClass('active').siblings('i.iconfont').addClass('active');
     localStorage.setItem('theme', theme);
     setTheme();
 });

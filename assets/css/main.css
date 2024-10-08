@@ -253,13 +253,17 @@ footer {
     margin-left: 20px;
 }
 
-.theme .icon {
+.theme .iconfont {
     display: none;
     cursor: pointer;
 }
 
-.theme .icon.active {
+.theme .iconfont.active {
     display: inherit;
+}
+
+.theme .iconfont[data-theme="black"] {
+    color: #ffffff;
 }
 
 /* media screen */
