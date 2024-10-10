@@ -112,6 +112,10 @@ footer {
     color: var(--common-gray);
 }
 
+.post .info {
+    max-width: calc(100% - 125px);
+}
+
 .post .info a.title {
     text-decoration: none;
     font-size: 18px;
@@ -194,6 +198,7 @@ footer {
 }
 
 .archive ul li a {
+    max-width: calc(100% - 59.45px);
     text-decoration: none;
     color: var(--common-black);
 }
