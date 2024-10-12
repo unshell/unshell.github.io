@@ -281,6 +281,10 @@ footer {
         flex-direction: column;
     }
 
+    .post .info {
+        max-width: 100%;
+    }
+
     .post .time {
         font-size: 12px;
         line-height: 24px;
