@@ -292,7 +292,6 @@ footer {
 }
 
 /* animate */
-
 @keyframes showBlock {
     from {
         opacity: 0;
