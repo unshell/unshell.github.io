@@ -43,8 +43,8 @@
                 // 获取日期
                 data[i].created_date = data[i].created_at.split('T')[0];
 
-                if (!tags.includes(data[i].created_date)) {
-                    tags.push(data[i].created_date);
+                if (!tags.includes(data[i].created_date.split('-')[0])) {
+                    tags.push(data[i].created_date.split('-')[0]);
                 }
             }
 
@@ -52,7 +52,7 @@
             for (var i = 0, archive = {}; i < tags.length; i++) {
                 archive[tags[i]] = [];
                 for (var j = 0; j < data.length; j++) {
-                    if (data[j].created_date == tags[i]) {
+                    if (data[j].created_date.split('-')[0] == tags[i]) {
                         archive[tags[i]].push(data[j]);
                     }
                 }
