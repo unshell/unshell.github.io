@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时</title>
+    <link rel="shortcut icon" href="/assets/icon/favicon.svg">
+    <style>
+        * {
+            font-family: 'Gotham', 'Helvetica', 'Arial', sans-serif;
+        }
+
+        article,
+        footer {
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown {
+            font-size: 96px;
+        }
+
+        .level {
+            display: flex;
+            justify-content: center;
+        }
+
+        .level span {
+            display: inline-block;
+            text-align: center;
+            min-width: 50px;
+            min-height: 50px;
+            line-height: 50px;
+            margin: 0 10px;
+            border: 1px solid #979797;
+            border-radius: 5px;
+            color: #979797;
+        }
+
+        .level span.active {
+            border: 1px solid #4c4948;
+            color: #4c4948;
+            font-weight: bold;
+        }
+
+        button {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #979797;
+            color: #979797;
+            background-color: transparent;
+            border-radius: 50%;
+            margin-top: 50px;
+
+        }
+
+        button.active {
+            border: 1px solid #4c4948;
+            color: #4c4948;
+            font-weight: bold;
+        }
+
+        footer {
+            font-size: 12px;
+            color: #979797;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <article class="wrapper">
+        <p class="countdown">40</p>
+        <div class="level">
+            <span class="active">40</span>
+            <span>60</span>
+            <span>80</span>
+        </div>
+        <button type="button" class="active">开始计时</button>
+    </article>
+    <footer>组间休息计时器</footer>
+    <!-- js part -->
+    <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var interval = 0;
+
+            // 点击事件
+            $('button').click(function () {
+                var $this = $(this), $countdown = $('p.countdown'),
+                    time = $countdown.text(), active = $this.hasClass('active');
+                time = time * 1;
+
+                if (active) {
+                    interval = setInterval(function () {
+                        if (time <= 0) {
+                            $('.level .active').click();
+                            $this.addClass('active');
+                            return false;
+                        }
+                        time--;
+                        $countdown.text(time);
+                    }, 1000);
+                    $this.removeClass('active');
+                } else {
+                    clearInterval(interval);
+                    $this.addClass('active');
+                }
+                return false;
+            });
+
+            // 选择时间
+            $('.level span').click(function () {
+                $('.level span').removeClass('active');
+                $(this).addClass('active');
+                $('p.countdown').text(this.innerText);
+                clearInterval(interval);
+            });
+        });
+    </script>
+</body>
+
+</html>
