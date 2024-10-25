@@ -17,9 +17,9 @@
         </header>
         <div class="nav">
             <a class="active" href="/">博客</a>
-            <a href="/tags.html">标签</a>
-            <a href="/archive.html">归档</a>
-            <a href="/about.html">关于</a>
+            <a href="/views/tags.html">标签</a>
+            <a href="/views/archive.html">归档</a>
+            <a href="/views/about.html">关于</a>
             <div class="theme">
                 <i class="iconfont icon-qing" data-theme="white"></i>
                 <i class="iconfont icon-duoyunyewan" data-theme="black"></i>
@@ -43,13 +43,13 @@
                 data[i].created_date = data[i].created_at.split('T')[0];
                 // 处理标签
                 data[i].tags = data[i].labels.map(function (item) {
-                    return '<a href="/tags.html#' + item.name + '">' + item.name + '</a>';
+                    return '<a href="/views/tags.html#' + item.name + '">' + item.name + '</a>';
                 });
                 // 追加模板
                 list.push(['<div class="post">',
                     '<div class="time">' + data[i].created_date + '</div>',
                     '<div class="info">',
-                    '<a class="title" href="/post.html?number=' + data[i].number + '">' + data[i].title + '</a>',
+                    '<a class="title" href="/views/post.html?number=' + data[i].number + '">' + data[i].title + '</a>',
                     data[i].tags.length > 0 ? '<p><span>/</span>' + data[i].tags.join('<span>/</span>') + '<span>/</span></p>' : '',
                     '</div>',
                     '</div>'

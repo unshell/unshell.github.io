@@ -17,15 +17,14 @@
         </header>
         <div class="nav">
             <a href="/">博客</a>
-            <a class="active" href="/tags.html">标签</a>
-            <a href="/archive.html">归档</a>
-            <a href="/about.html">关于</a>
+            <a href="/views/tags.html">标签</a>
+            <a class="active" href="/views/archive.html">归档</a>
+            <a href="/views/about.html">关于</a>
             <div class="theme">
                 <i class="iconfont icon-qing" data-theme="white"></i>
                 <i class="iconfont icon-duoyunyewan" data-theme="black"></i>
             </div>
         </div>
-        <div class="tags"></div>
         <div class="archives">
             <p class="loading">加载中...</p>
         </div>
@@ -41,10 +40,11 @@
         true && issues(function (data) {
             // 处理标签
             for (var i = 0, tags = []; i < data.length; i++) {
-                for (var j = 0; j < data[i].labels.length; j++) {
-                    if (!tags.includes(data[i].labels[j].name)) {
-                        tags.push(data[i].labels[j].name);
-                    }
+                // 获取日期
+                data[i].created_date = data[i].created_at.split('T')[0];
+
+                if (!tags.includes(data[i].created_date.split('-')[0])) {
+                    tags.push(data[i].created_date.split('-')[0]);
                 }
             }
 
@@ -52,10 +52,7 @@
             for (var i = 0, archive = {}; i < tags.length; i++) {
                 archive[tags[i]] = [];
                 for (var j = 0; j < data.length; j++) {
-                    var names = data[j].labels.map(function (item) {
-                        return item.name;
-                    });
-                    if (names.includes(tags[i])) {
+                    if (data[j].created_date.split('-')[0] == tags[i]) {
                         archive[tags[i]].push(data[j]);
                     }
                 }
@@ -63,12 +60,13 @@
 
             // 处理归档
             for (var key in archive) {
-                $('.tags').append('<a href="#' + key + '">' + key + '</a>');
                 $('.archives').append(['<div class="archive">',
-                    '<div class="seperator" id="' + key + '">' + key + '</div>',
+                    '<div class="seperator">' + key.split('-')[0] + '</div>',
                     '<ul>',
                     archive[key].map(function (item) {
-                        return '<li><a href="/post.html?number=' + item.number + '">' + item.title + '</a></li>';
+                        // 获取日期
+                        item.created_date = item.created_date.split('-');
+                        return '<li><span>' + item.created_date[1] + '-' + item.created_date[2] + '</span><a href="/views/post.html?number=' + item.number + '">' + item.title + '</a></li>';
                     }).join(''),
                     '</ul>',
                     '</div>'
@@ -77,13 +75,6 @@
 
             // 加载层
             loading(true);
-
-            // 超链接处理
-            var $a = $('a[href="' + decodeURI(location.hash) + '"]'), target = $($a.attr('href'));
-            // 平滑滚动到目标位置
-            $('html, body').animate({
-                scrollTop: target.offset().top || 0
-            }, 1000); // 1000 是动画持续时间（毫秒）
         });
     </script>
 </body>
