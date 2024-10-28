@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爸爸在哪里？</title>
+    <link rel="shortcut icon" href="/assets/icon/favicon.svg">
+    <style>
+        * {
+            font-family: 'Gotham', 'Helvetica', 'Arial', sans-serif;
+        }
+
+        body,
+        article,
+        p,
+        h2 {
+            margin: 0;
+        }
+
+        article {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        article h2 {
+            font-size: 48px;
+            text-align: center;
+            margin-top: 35vh;
+        }
+
+        article p {
+            width: 6em;
+            animation: typingWords 2s steps(6) 1, cursor 0.5s steps(1) infinite;
+            animation-fill-mode: forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 1px solid #000;
+
+            font-size: 24px;
+            margin: 20px auto;
+        }
+
+        @keyframes typingWords {
+            0% {
+                width: 0;
+            }
+        }
+
+        @keyframes cursor {
+            50% {
+                border-color: transparent;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <article>
+        <h2>在哪呢？</h2>
+        <p>计算中...</p>
+    </article>
+    <!-- js part -->
+    <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/libs/dayjs.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var $h2 = $('h2'), $p = $('p'), ht = ['在家', '上班'],
+                pt = ['还能休息一天', '明天就上班了', '还要上一天班', '明天就回家了'],
+                restday = '2024-10-28', // 休息的第一天
+                today = dayjs().format('YYYY-MM-DD'); // 当天
+
+            var diff = dayjs(today).diff(restday, 'day'), cycle = 4, index = diff % cycle;
+            $p.text(pt[index]);
+            $h2.text(ht[index < 2 ? 0 : 1]);
+        });
+    </script>
+</body>
+
+</html>

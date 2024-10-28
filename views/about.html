@@ -8,6 +8,26 @@
     <link rel="shortcut icon" href="/assets/icon/favicon.svg">
     <link rel="stylesheet" href="/assets/css/main.min.css?v=2410121401">
     <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_2103599_b2r9yca5ycp.css">
+    <style>
+        h2 {
+            font-size: 18px;
+            color: var(--common-black);
+        }
+
+        h2::before {
+            content: '# ';
+            color: var(--theme-color);
+        }
+
+        .products a {
+            display: inline-block;
+            border-radius: 5px;
+            padding: 10px 20px;
+            color: var(--theme-color);
+            text-decoration: none;
+            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+        }
+    </style>
 </head>
 
 <body class="white">
@@ -28,8 +48,11 @@
         <div class="about">
             <p>记录点工作和日常相关的内容，希望能写点有趣的东西吧。</p>
             <br>
-            <p><strong># 小产物</strong></p>
-            <a href="/expand/countdown.html">组间计时器</a>
+            <h2>小产物</h2>
+            <div class="products">
+                <a href="/expand/countdown.html">组间计时器</a>
+                <a href="/expand/whereisdaddy.html">爸爸去哪了</a>
+            </div>
         </div>
         <footer>2024 &copy;FINCH BLOG</footer>
     </article>
