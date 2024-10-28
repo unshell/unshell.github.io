@@ -67,7 +67,7 @@
         $(document).ready(function () {
             var $h2 = $('h2'), $p = $('p'), ht = ['在家', '上班'],
                 pt = ['还能休息一天', '明天就上班了', '还要上一天班', '明天就回家了'],
-                restday = '2024-10-28', // 休息的第一天
+                restday = '2024-10-25', // 休息的第一天
                 today = dayjs().format('YYYY-MM-DD'); // 当天
 
             var diff = dayjs(today).diff(restday, 'day'), cycle = 4, index = diff % cycle;
