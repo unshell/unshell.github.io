@@ -85,13 +85,12 @@
     <article class="wrapper animate__animated">
         <p class="countdown">40</p>
         <div class="level">
-            <span>5</span>
             <span class="active">40</span>
             <span>60</span>
             <span>80</span>
         </div>
         <button type="button" class="active">开始计时</button>
-        <audio id="over" controls loop preload src="/expand/audio/over.mp3"></audio>
+        <audio id="over" loop preload src="/expand/audio/over.mp3"></audio>
     </article>
     <footer>组间休息计时器</footer>
     <!-- js part -->
@@ -109,9 +108,9 @@
                 if (active) {
                     interval = setInterval(function () {
                         if (time <= 0) {
-                            $('.level .active').click();
+                            $('span.active').click();
                             $this.addClass('active');
-                            vibrate(2000); // 提示倒计时结束
+                            vibrate(2500); // 提示倒计时结束
                             return false;
                         }
                         time--;
@@ -125,19 +124,23 @@
                 return false;
             });
 
-            // 双击事件
-            $('footer').click(function () {
-                var $over = $('#over');
-                $over.css('display', 'block');
-            });
-
             // 选择时间
-            $('.level span').click(function () {
-                $('.level span').removeClass('active');
+            $(document).on('click', 'span', function () {
+                $('span').removeClass('active');
                 $(this).addClass('active');
                 $('button').addClass('active');
                 $('p.countdown').text(this.innerText);
                 clearInterval(interval);
+            });
+
+            // 隐藏事件
+            $('footer').click(function () {
+                var spans = document.getElementsByTagName('span'), length = spans.length;
+                if (length > 3) {
+                    $('span:first').remove();
+                } else {
+                    $('div.level').prepend('<span>3</span>');
+                }
             });
 
             // 手机振动
@@ -159,11 +162,14 @@
                     audio.currentTime = 0;
                 }, time)
             }
+        });
 
-            $(document).one('click touchstart', document.body, function () {
-                for (var i = 0; i < 1; i++) {
-                    audio.load();
-                    audio.play();
+        // 针对 IOS 浏览器初始化设置 muted 的处理
+        document.addEventListener('DOMContentLoaded', function () {
+            var audio = document.getElementById('over');
+            audio.addEventListener('play', function () {
+                if (audio.muted) {
+                    audio.muted = false;
                 }
             });
         });
