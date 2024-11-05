@@ -108,6 +108,7 @@
                         if (time <= 0) {
                             $('.level .active').click();
                             $this.addClass('active');
+                            vibrate(2000); // 提示倒计时结束
                             return false;
                         }
                         time--;
@@ -125,9 +126,25 @@
             $('.level span').click(function () {
                 $('.level span').removeClass('active');
                 $(this).addClass('active');
+                $('button').addClass('active');
                 $('p.countdown').text(this.innerText);
                 clearInterval(interval);
             });
+
+            // 手机振动
+            function vibrate(time) {
+                if (navigator.vibrate) {
+                    navigator.vibrate(time);
+                    $('footer').html('倒计时结束');
+                } else {
+                    $('footer').html('您的设备不支持振动功能');
+                }
+
+                // 恢复页脚
+                setTimeout(function () {
+                    $('footer').html('组间休息计时器');
+                }, time)
+            }
         });
     </script>
 </body>
