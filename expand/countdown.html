@@ -91,7 +91,7 @@
             <span>80</span>
         </div>
         <button type="button" class="active">开始计时</button>
-        <audio style="display: none;" id="over" loop preload src="/expand/audio/over.mp3"></audio>
+        <audio id="over" loop preload src="/expand/audio/over.mp3"></audio>
     </article>
     <footer>组间休息计时器</footer>
     <!-- js part -->
@@ -100,7 +100,7 @@
         $(document).ready(function () {
             var interval = 0, audio = document.getElementById('over');
             audio.load();
-            audio.pause();
+            audio.play();
 
             // 点击事件
             $('button').click(function () {
