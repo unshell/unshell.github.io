@@ -125,6 +125,12 @@
                 return false;
             });
 
+            // 双击事件
+            $('footer').click(function () {
+                var $over = $('#over');
+                $over.css('display', 'block');
+            });
+
             // 选择时间
             $('.level span').click(function () {
                 $('.level span').removeClass('active');
