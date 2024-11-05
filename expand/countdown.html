@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>倒计时</title>
     <link rel="shortcut icon" href="/assets/icon/favicon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         * {
             font-family: 'Gotham', 'Helvetica', 'Arial', sans-serif;
@@ -81,14 +82,16 @@
 </head>
 
 <body>
-    <article class="wrapper">
+    <article class="wrapper animate__animated">
         <p class="countdown">40</p>
         <div class="level">
+            <span>5</span>
             <span class="active">40</span>
             <span>60</span>
             <span>80</span>
         </div>
         <button type="button" class="active">开始计时</button>
+        <audio style="display: none;" id="over" loop controls src="/expand/audio/over.mp3"></audio>
     </article>
     <footer>组间休息计时器</footer>
     <!-- js part -->
@@ -133,6 +136,9 @@
 
             // 手机振动
             function vibrate(time) {
+                var audio = document.getElementById('over');
+                $('article').addClass('animate__shakeY');
+                audio.play();
                 if (navigator.vibrate) {
                     navigator.vibrate(time);
                     $('footer').html('倒计时结束');
@@ -142,7 +148,10 @@
 
                 // 恢复页脚
                 setTimeout(function () {
+                    $('article').removeClass('animate__shakeY');
                     $('footer').html('组间休息计时器');
+                    audio.pause();
+                    audio.currentTime = 0;
                 }, time)
             }
         });
