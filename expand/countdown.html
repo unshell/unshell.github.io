@@ -98,7 +98,8 @@
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script>
         $(document).ready(function () {
-            var interval = 0;
+            var interval = 0, audio = document.getElementById('over');
+            audio.load();
 
             // 点击事件
             $('button').click(function () {
@@ -142,9 +143,7 @@
 
             // 手机振动
             function vibrate(time) {
-                var audio = document.getElementById('over');
                 $('article').addClass('animate__shakeY');
-                audio.load();
                 audio.play();
                 if (navigator.vibrate) {
                     navigator.vibrate(time);
