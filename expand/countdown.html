@@ -144,6 +144,7 @@
             function vibrate(time) {
                 var audio = document.getElementById('over');
                 $('article').addClass('animate__shakeY');
+                audio.load();
                 audio.play();
                 if (navigator.vibrate) {
                     navigator.vibrate(time);
