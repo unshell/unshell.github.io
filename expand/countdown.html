@@ -99,8 +99,6 @@
     <script>
         $(document).ready(function () {
             var interval = 0, audio = document.getElementById('over');
-            audio.load();
-            audio.play();
 
             // 点击事件
             $('button').click(function () {
@@ -161,6 +159,13 @@
                     audio.currentTime = 0;
                 }, time)
             }
+
+            $(document).one('click touchstart', document.body, function () {
+                for (var i = 0; i < 1; i++) {
+                    audio.load();
+                    audio.play();
+                }
+            });
         });
     </script>
 </body>
