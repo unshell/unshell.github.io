@@ -1,0 +1,15 @@
+{
+    "project": {
+        "countdown": {
+            "interval": [
+                40,
+                60,
+                80
+            ]
+        },
+        "whereisdaddy": {
+            "restday": "2024-10-25"
+        }
+    },
+    "version": "1.0.0"
+}

@@ -95,9 +95,28 @@
     <footer>组间休息计时器</footer>
     <!-- js part -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/js/api.min.js?v=2410121401"></script>
     <script>
         $(document).ready(function () {
             var interval = 0, audio = document.getElementById('over');
+
+            // 获取配置
+            issue(function (data) {
+                // 校验 json 格式
+                if (validateJson(data.body)) {
+                    data.body = parseJson(data.body); // 解析、转义
+                    var body = data.body || {}, project = body.project || {}, countdown = project.countdown || {};
+                    for (var i = 0, spans = [], interval = countdown.interval || []; i < interval.length; i++) {
+                        if (i > 0) {
+                            spans.push('<span>' + interval[i] + '</span>');
+                        } else {
+                            spans.push('<span class="active">' + interval[i] + '</span>');
+                            $('p.countdown').html(interval[i]);
+                        }
+                    }
+                    if (spans.length > 0) $('div.level').html(spans.join(''));
+                }
+            }, 24);
 
             // 点击事件
             $('button').click(function () {
@@ -124,6 +143,14 @@
                 return false;
             });
 
+            // 双击事件
+            $('p.countdown').dblclick(function () {
+                if (confirm('是否跳转至配置页面？')) {
+                    location.href = '/expand/jsondatabase.html';
+                }
+                return false;
+            });
+
             // 选择时间
             $(document).on('click', 'span', function () {
                 $('span').removeClass('active');
@@ -138,6 +165,8 @@
                 var spans = document.getElementsByTagName('span'), length = spans.length;
                 if (length > 3) {
                     $('span:first').remove();
+                    $('span:first').addClass('active');
+                    $('p.countdown').html($('span:first').html());
                 } else {
                     $('div.level').prepend('<span>3</span>');
                 }
