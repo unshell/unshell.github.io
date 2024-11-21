@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        article {
+            margin-top: 50%;
+        }
+
+        article p {
+            font-size: 28px;
+            text-align: center;
+        }
+
+        article .btn {
+            display: flex;
+            justify-content: center;
+        }
+
+        p {
+            padding: 1.3em 3em;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+            color: #000;
+        }
+
+        button {
+            padding: 1.3em 3em;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            font-weight: 500;
+            color: #000;
+            background-color: #fff;
+            border: none;
+            border-radius: 45px;
+            -webkit-box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+            -webkit-transition: all 0.3s ease 0s;
+            transition: all 0.3s ease 0s;
+            cursor: pointer;
+            outline: none;
+        }
+
+        button:hover {
+            background-color: #2EE59D;
+            -webkit-box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+            box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+            color: #fff;
+            -webkit-transform: translateY(-7px);
+            -ms-transform: translateY(-7px);
+            transform: translateY(-7px);
+        }
+
+        button:active {
+            -webkit-transform: translateY(-1px);
+            -ms-transform: translateY(-1px);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <article>
+        <p></p>
+        <div class="btn">
+            <button type="button" id="btn">点击开始</button>
+        </div>
+    </article>
+    <!-- JS部分 -->
+    <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var license = [
+                '豫A58ET91',
+                '甘CX2Z832',
+                '京O9S632',
+                '冀G0N0S1',
+                '浙C34JK1',
+                '粤E17Y8N',
+                '川X11A91P',
+                '鲁J4UW450',
+                '新G4N488',
+                '粤FEG169'
+            ], $p = $('p').html(license[0]);
+            // 点击事件
+            $('#btn').click(function () {
+                var time = 10, intervalId = 0, updateLicense = function () {
+                    time += 3;
+                    $p.html(license[randomNumber(0, license.length - 1)]);
+                    clearInterval(intervalId); // 清除当前的interval
+                    if (time <= 200) {
+                        intervalId = setInterval(updateLicense, time);
+                    }
+                };
+                intervalId = setInterval(updateLicense, time);
+            });
+            /**
+             * 随机一个数（包含最大值、最小值）
+             * 
+             * @param {Number} min  最小值
+             * @param {Number} max  最大值
+             * @param {Array} range 自定义数组区间
+             */
+            function randomNumber(min = 1, max = 10, range = []) {
+                if (range.length > 0) {
+                    min = 0;
+                    max = range.length - 1;
+                    return range[Math.floor(Math.random() * (max - min + 1)) + min];
+                }
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+        });
+    </script>
+</body>
+
+</html>
