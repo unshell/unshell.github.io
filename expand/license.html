@@ -149,9 +149,12 @@
                         var json = XLSX.utils.sheet_to_json(worksheet);
                         for (var i = 0, l = []; i < json.length; i++) {
                             if (json[i].hasOwnProperty('车牌号')) {
-                                l.push(json[i]['车牌号']);
+                                // 做简单的去空格处理
+                                var text = json[i]['车牌号'];
+                                l.push(text.replace(/\s+/g, ''));
                             }
                         }
+                        // 数据处理
                         if (l.length > 0) {
                             if (confirm('识别到' + l.length + '个车牌号，确认替换吗？')) {
                                 license = l;
