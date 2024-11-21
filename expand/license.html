@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        article,
+        p,
+        body,
+        button,
+        footer {
+            margin: 0;
+            padding: 0;
+        }
+
         article {
             margin-top: 35vh;
         }
@@ -62,18 +71,34 @@
             -ms-transform: translateY(-1px);
             transform: translateY(-1px);
         }
+
+        footer {
+            width: 100%;
+            position: fixed;
+            padding-bottom: 5px;
+            bottom: 0;
+        }
+
+        footer p {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <article>
-        <p></p>
+        <p id="license"></p>
         <div class="btn">
             <button type="button" id="btn">点击开始</button>
         </div>
     </article>
+    <footer>
+        <p style="cursor: pointer;" id="lce-btn">读取文件</p>
+        <input type="file" name="lce" id="lce" style="display: none;">
+    </footer>
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/libs/xlsx.mini.js"></script>
     <script>
         $(document).ready(function () {
             var license = [
@@ -87,8 +112,8 @@
                 '鲁J4UW450',
                 '新G4N488',
                 '粤FEG169'
-            ], $p = $('p').html(license[0]);
-            // 点击事件
+            ], $p = $('#license').html(license[0]);
+            // 开始点击事件
             $('#btn').click(function () {
                 var time = 10, intervalId = 0, updateLicense = function () {
                     time += 3;
@@ -99,6 +124,44 @@
                     }
                 };
                 intervalId = setInterval(updateLicense, time);
+            });
+            // 点击上传事件
+            $('#lce-btn').click(function () {
+                $('#lce').trigger('click');
+            });
+            // 上传按钮事件
+            $('#lce').on('change', function (event) {
+                var files = event.target.files;
+                if (files && files[0]) {
+                    var file = files[0];
+                    var ready = new FileReader();
+                    ready.onload = function (e) {
+                        var data = e.target.result;
+                        var workbook = XLSX.read(data, {
+                            type: 'binary' // 这里指定读取类型为二进制
+                        });
+                        var sheetName = workbook.SheetNames[0];
+                        var worksheet = workbook.Sheets[sheetName];
+                        // 转换为 Json
+                        var json = XLSX.utils.sheet_to_json(worksheet);
+                        for (var i = 0, l = []; i < json.length; i++) {
+                            if (json[i].hasOwnProperty('车牌号')) {
+                                l.push(json[i]['车牌号']);
+                            }
+                        }
+                        if (l.length > 0) {
+                            if (confirm('识别到' + l.length + '个车牌号，确认替换吗？')) {
+                                license = l;
+                                $p = $('#license').html(license[0]);
+                            } else {
+                                alert('已取消');
+                            }
+                        } else {
+                            alert('未识别到车牌号');
+                        }
+                    }
+                    ready.readAsBinaryString(file);
+                }
             });
             /**
              * 随机一个数（包含最大值、最小值）
