@@ -80,6 +80,7 @@
         }
 
         footer p {
+            color: #cccccc;
             text-align: center;
         }
     </style>
@@ -99,20 +100,21 @@
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script src="/assets/libs/xlsx.mini.js"></script>
+    <script src="/assets/js/api.js"></script>
     <script>
         $(document).ready(function () {
-            var license = [
-                '豫A58ET91',
-                '甘CX2Z832',
-                '京O9S632',
-                '冀G0N0S1',
-                '浙C34JK1',
-                '粤E17Y8N',
-                '川X11A91P',
-                '鲁J4UW450',
-                '新G4N488',
-                '粤FEG169'
-            ], $p = $('#license').html(license[0]);
+            var license = ['无车牌号信息'], $p = $('#license').html(license[0]), setting = {};
+            // 获取配置
+            issue(function (data) {
+                // 校验 json 格式
+                if (validateJson(data.body, true)) {
+                    data.body = parseJson(data.body); // 解析、转义
+                    data.body = JSON.stringify(data.body, null, 2);
+                }
+                setting = JSON.parse(data.body);
+                license = setting.project.license;
+                $p.html(license[0] || '无车牌号信息');
+            }, 24);
             // 开始点击事件
             $('#btn').click(function () {
                 var time = 10, intervalId = 0, updateLicense = function () {
@@ -152,7 +154,16 @@
                         if (l.length > 0) {
                             if (confirm('识别到' + l.length + '个车牌号，确认替换吗？')) {
                                 license = l;
-                                $p = $('#license').html(license[0]);
+                                $p.html(license[0]);
+
+                                // 设置到数据库
+                                setting.project.license = l;
+                                // 校验 json 格式
+                                if (validateJson(setting, true)) {
+                                    update(function () {
+                                        console.log('-- 更新成功 --')
+                                    }, JSON.stringify(setting), 24);
+                                }
                             } else {
                                 alert('已取消');
                             }
