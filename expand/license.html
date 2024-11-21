@@ -163,7 +163,7 @@
                 audio.play();
                 audio.playbackRate = 1;
                 var time = 10, intervalId = 0, updateLicense = function () {
-                    audio.playbackRate -= 0.01;
+                    // audio.playbackRate -= 0.01;
                     time += 3;
                     $p.html(license[randomNumber(0, license.length - 1)]);
                     clearInterval(intervalId); // 清除当前的interval
