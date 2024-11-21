@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>随机车牌号</title>
     <link rel="shortcut icon" href="/assets/icon/license.svg">
+    <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-car.css" />
+
     <style>
         article,
         p,
@@ -17,11 +19,14 @@
         }
 
         article {
-            margin-top: 35vh;
+            margin-top: 25vh;
         }
 
         article p {
-            font-size: 28px;
+            font-size: 4em;
+            font-weight: bold;
+            letter-spacing: 20px;
+            color: #fff;
             text-align: center;
         }
 
@@ -31,7 +36,7 @@
         }
 
         p {
-            padding: 1.3em 3em;
+            padding: 1.3em 0;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 2.5px;
@@ -84,27 +89,64 @@
             color: #cccccc;
             text-align: center;
         }
+
+        video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -100;
+            background-size: cover;
+            object-position: center;
+        }
+
+        /** admin移动端样式 */
+        @media screen and (max-width: 768px) {
+            article {
+                margin-top: 35vh;
+            }
+
+            video {
+                left: -110%;
+            }
+
+            article p {
+                font-size: 2em;
+                letter-spacing: 10px;
+            }
+
+            p {
+                padding: 1.3em 0;
+            }
+        }
     </style>
 </head>
 
 <body>
     <article>
+        <video src="/assets/image/globe.mp4" muted autoplay loop playsinline></video>
         <p id="license"></p>
         <div class="btn">
             <button type="button" id="btn">点击开始</button>
         </div>
     </article>
     <footer>
+        <audio id="over" loop preload src="/expand/audio/tiger.mp3"></audio>
         <p style="cursor: pointer;" id="lce-btn">读取文件</p>
         <input type="file" name="lce" id="lce" style="display: none;">
     </footer>
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
+    <script src="/assets/libs/odometer.min.js"></script>
     <script src="/assets/libs/xlsx.mini.js"></script>
     <script src="/assets/js/api.js"></script>
     <script>
         $(document).ready(function () {
-            var license = ['无车牌号信息'], $p = $('#license').html(license[0]), setting = {};
+            var license = ['无车牌号信息'], $p = $('#license').html(license[0]), audio = document.getElementById('over'), setting = {};
+
             // 获取配置
             issue(function (data) {
                 // 校验 json 格式
@@ -118,12 +160,16 @@
             }, 24);
             // 开始点击事件
             $('#btn').click(function () {
+                audio.play();
                 var time = 10, intervalId = 0, updateLicense = function () {
                     time += 3;
                     $p.html(license[randomNumber(0, license.length - 1)]);
                     clearInterval(intervalId); // 清除当前的interval
                     if (time <= 200) {
                         intervalId = setInterval(updateLicense, time);
+                    } else {
+                        audio.pause();
+                        audio.currentTime = 0;
                     }
                 };
                 intervalId = setInterval(updateLicense, time);
@@ -193,6 +239,16 @@
                 }
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }
+        });
+
+        // 针对 IOS 浏览器初始化设置 muted 的处理
+        document.addEventListener('DOMContentLoaded', function () {
+            var audio = document.getElementById('over');
+            audio.addEventListener('play', function () {
+                if (audio.muted) {
+                    audio.muted = false;
+                }
+            });
         });
     </script>
 </body>
