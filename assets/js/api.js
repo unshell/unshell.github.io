@@ -120,6 +120,13 @@ function parseJson(json) {
     return typeof json == 'object' ? json : parseJson(JSON.parse(json));
 }
 
+/**
+ * Is Mobile Device
+ */
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 /* Document click */
 $(document).on('click', 'i.iconfont', function () {
     var $this = $(this), $sibling = $this.siblings('i.iconfont'), data = $sibling.data(), theme = data.theme;

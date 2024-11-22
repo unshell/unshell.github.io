@@ -134,7 +134,7 @@
         </div>
     </article>
     <footer>
-        <audio id="over" loop preload src="/expand/audio/tiger.mp3"></audio>
+        <audio id="tiger" preload src="/expand/audio/tiger.mp3"></audio>
         <p style="cursor: pointer;" id="lce-btn">读取文件</p>
         <input type="file" name="lce" id="lce" style="display: none;">
     </footer>
@@ -145,7 +145,8 @@
     <script src="/assets/js/api.js"></script>
     <script>
         $(document).ready(function () {
-            var license = ['无车牌号信息'], $p = $('#license').html(license[0]), audio = document.getElementById('over'), setting = {};
+            var license = ['无车牌号信息'], $p = $('#license').html(license[0]),
+                audio = document.getElementById('tiger'), setting = {};
 
             // 获取配置
             issue(function (data) {
@@ -160,11 +161,14 @@
             }, 24);
             // 开始点击事件
             $('#btn').click(function () {
+                audio.src = '/expand/audio/tiger.mp3';
                 audio.play();
                 audio.playbackRate = 1;
                 var time = 10, intervalId = 0, updateLicense = function () {
-                    // audio.playbackRate -= 0.01;
-                    time += 3;
+                    if (!isMobile()) {
+                        audio.playbackRate -= 0.02;
+                    }
+                    time += 5;
                     $p.html(license[randomNumber(0, license.length - 1)]);
                     clearInterval(intervalId); // 清除当前的interval
                     if (time <= 200) {
@@ -172,6 +176,8 @@
                     } else {
                         audio.pause();
                         audio.currentTime = 0;
+                        audio.src = '/expand/audio/so-hard.mp3';
+                        audio.play();
                     }
                 };
                 intervalId = setInterval(updateLicense, time);
@@ -245,7 +251,7 @@
 
         // 针对 IOS 浏览器初始化设置 muted 的处理
         document.addEventListener('DOMContentLoaded', function () {
-            var audio = document.getElementById('over');
+            var audio = document.getElementById('tiger');
             audio.addEventListener('play', function () {
                 if (audio.muted) {
                     audio.muted = false;
