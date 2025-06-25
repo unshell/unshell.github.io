@@ -36,7 +36,7 @@
         }
 
         footer {
-            display: flex;
+            display: none;
             justify-content: center;
             margin-top: 50px;
             font-size: 14px;
@@ -86,6 +86,9 @@
             } else {
                 $wrapper.css('background-image', 'url(/assets/ads/' + number + '.jpg?v=250625)');
             }
+            $wrapper.dblclick(function () {
+                $('footer').css('display', 'flex');
+            });
         });
     </script>
 </body>
