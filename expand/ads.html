@@ -34,6 +34,23 @@
             padding: 1px 5px 2px 5px;
             border-radius: 5px;
         }
+
+        footer {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        footer p {
+            padding: 0 10px;
+            border-right: 1px solid #e9e9e9;
+        }
+
+        footer p:last-child {
+            border: none;
+        }
     </style>
 </head>
 
@@ -41,7 +58,19 @@
     <div class="wrapper">
         <span class="marked">广告</span>
     </div>
-    <script async src="//githubcdn.qiushaocloud.top/gh/qiushaocloud/site-counter@master/dist/qiushaocloud_site_counter.min.js"></script>
+    <footer>
+        <p>总访问量: <span id="qiushaocloud_sitecounter_value_site_pv">n</span></p>
+        <p>总访客量: <span id="qiushaocloud_sitecounter_value_site_uv">n</span></p>
+        <p>今日访问量: <span id="qiushaocloud_sitecounter_value_today_site_pv">n</span></p>
+        <p>今日访客量: <span id="qiushaocloud_sitecounter_value_today_site_uv">n</span></p>
+
+        <p>本页面总访问量: <span id="qiushaocloud_sitecounter_value_site_page_pv">n</span></p>
+        <p>本页面总访客量: <span id="qiushaocloud_sitecounter_value_site_page_uv">n</span></p>
+        <p>本页面今日访问量: <span id="qiushaocloud_sitecounter_value_today_site_page_pv">n</span></p>
+        <p>本页面今日访客量: <span id="qiushaocloud_sitecounter_value_today_site_page_uv">n</span></p>
+    </footer>
+    <script async
+        src="//githubcdn.qiushaocloud.top/gh/qiushaocloud/site-counter@master/dist/qiushaocloud_site_counter.min.js"></script>
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script src="/assets/js/api.min.js?v=2410121401"></script>
