@@ -50,9 +50,9 @@
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }, number = '00' + random(1, 8), where = params();
             if (where.type === 'big') {
-                number = '001';
+                number = '00' + random(1, 4);
                 $wrapper.css('height', '100vh');
-                $wrapper.css('background-image', 'url(/assets/ads/big-' + number + '.jpg?v=250625)');
+                $wrapper.css('background-image', 'url(/assets/ads/big-' + number + '.jpg?v=250626)');
             } else {
                 $wrapper.css('background-image', 'url(/assets/ads/' + number + '.jpg?v=250625)');
             }
