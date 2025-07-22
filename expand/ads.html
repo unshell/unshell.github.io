@@ -21,6 +21,19 @@
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+            background-color: black;
+        }
+
+        .wrapper .ads {
+            text-align: center;
+            font-size: 32px;
+            color: #ffff45;
+        }
+
+        .wrapper .ads p:first-child {
+            color: #fff;
+            font-weight: 500;
+            line-height: 22px;
         }
 
         .marked {
@@ -78,11 +91,28 @@
         $(document).ready(function () {
             var $wrapper = $('.wrapper'), random = function (min, max) {
                 return Math.floor(Math.random() * (max - min + 1)) + min;
-            }, number = '00' + random(1, 8), where = params();
+            }, number = '00' + random(1, 8), where = params(), text = [
+                { top: '平民零氪搬砖服', bottom: '装备全靠打，元宝能交易' },
+                { top: '复古零氪开荒版', bottom: '开局小怪爆神装' },
+                { top: '散人专属零氪服', bottom: '地图无门槛，打宝全自由' },
+                { top: '全新零氪打金版', bottom: '开局充值券直接送' },
+                { top: '经典零氪怀旧服', bottom: '不用肝，轻松打宝爽不停' },
+            ];
             if (where.type === 'big') {
                 number = '00' + random(1, 4);
                 $wrapper.css('height', '100vh');
                 $wrapper.css('background-image', 'url(/assets/ads/big-' + number + '.jpg?v=250626)');
+            } else if (where.type === 'text') {
+                number = random(0, 4);
+                var ads = document.createElement('div'),
+                    p = document.createElement('p');
+                ads.className = 'ads';
+                $wrapper.append(ads);
+                p.innerText = text[number].top;
+                ads.append(p);
+                p = document.createElement('p');
+                p.innerText = text[number].bottom;
+                ads.append(p);
             } else {
                 $wrapper.css('background-image', 'url(/assets/ads/' + number + '.jpg?v=250625)');
             }
