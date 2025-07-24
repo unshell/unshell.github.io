@@ -125,7 +125,7 @@
 
             if (where.type === 'big') { // 大图模式
                 $wrapper.css('height', '100vh');
-                $wrapper.css('background-image', 'url(/assets/ads/big-' + ('00' + random(1, 4)) + '.jpg?v=250626)');
+                $wrapper.css('background-image', 'url(/assets/ads/big-' + ('00' + random(1, 4)) + '.jpg?v=250724)');
             } else if (where.type === 'text') { // 文案模式
                 var ads = document.createElement('div'),
                     p = document.createElement('p'),
@@ -147,7 +147,7 @@
                     }, 5000);
                 });
             } else { // 默认模式
-                $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + random(1, 4)) + '.jpg?v=250625)');
+                $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + random(1, 4)) + '.jpg?v=250724)');
             }
             $wrapper.dblclick(function () {
                 $('footer').css('display', 'flex');
