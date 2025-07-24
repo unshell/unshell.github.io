@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-adsense-account" content="ca-pub-5626603682905398">
     <title>广告</title>
+    <link rel="shortcut icon" href="/assets/icon/favicon.svg">
     <link rel="stylesheet" href="/assets/css/animation.css">
     <style>
         body,
@@ -23,13 +24,19 @@
         .wrapper {
             position: relative;
             height: 162px;
+            opacity: 0.9;
             overflow: hidden;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
             background-color: black;
+            cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
+        }
+
+        .wrapper:hover {
+            opacity: 1;
         }
 
         .wrapper .ads {
@@ -57,8 +64,9 @@
             left: 5px;
             bottom: 5px;
             display: inline-block;
-            background-color: rgba(183, 183, 183, 0.7);
+            background-color: rgba(183, 183, 183, 0.5);
             color: white;
+            opacity: 0.8;
             font-size: 13px;
             padding: 1px 5px 2px 5px;
             border-radius: 5px;
@@ -107,17 +115,18 @@
         $(document).ready(function () {
             var $wrapper = $('.wrapper'), random = function (min, max) {
                 return Math.floor(Math.random() * (max - min + 1)) + min;
-            }, number = '00' + random(1, 8), where = params(), texts = [
+            }, where = params(), texts = [
                 { top: '平民零氪搬砖服', bottom: '装备全靠 打元宝能交易' },
                 { top: '复古零氪开荒版', bottom: '开 局 小 怪 爆 神 装' },
                 { top: '散人专属零氪服', bottom: '地图无门槛 打宝全自由' },
                 { top: '全新零氪打金版', bottom: '开 局 充 值 券 直 接 送' },
                 { top: '经典零氪怀旧服', bottom: '不用肝 轻松打宝爽不停' },
-            ], animations = ['jello-diagonal-1', 'wobble-hor-bottom', 'jello-horizontal', 'tracking-in-contract'];
-            if (where.type === 'big') {
+            ], animations = ['jello-horizontal', 'bounce-top', 'blink-2', 'shake-top'];
+
+            if (where.type === 'big') { // 大图模式
                 $wrapper.css('height', '100vh');
                 $wrapper.css('background-image', 'url(/assets/ads/big-' + ('00' + random(1, 4)) + '.jpg?v=250626)');
-            } else if (where.type === 'text') {
+            } else if (where.type === 'text') { // 文案模式
                 var ads = document.createElement('div'),
                     p = document.createElement('p'),
                     text = texts[random(0, texts.length - 1)],
@@ -137,8 +146,8 @@
                         p.classList.add(animate);
                     }, 5000);
                 });
-            } else {
-                $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + random(1, 8)) + '.jpg?v=250625)');
+            } else { // 默认模式
+                $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + random(1, 4)) + '.jpg?v=250625)');
             }
             $wrapper.dblclick(function () {
                 $('footer').css('display', 'flex');
