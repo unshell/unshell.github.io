@@ -124,9 +124,9 @@
             ], animations = ['jello-horizontal', 'bounce-top', 'blink-2', 'shake-top'];
 
             if (where.type === 'big') { // 大图模式
-                var number = random(1, 4);
+                var number = '00' + random(1, 4);
                 $wrapper.css('height', '100vh');
-                if (number === 1 || number === 2) {
+                if (number > 2) {
                     $wrapper.css('background-image', 'url(/assets/ads/video-' + number + '.webp?v=250724), url(/assets/ads/big-' + number + '.jpg?v=250724)');
                 } else {
                     $wrapper.css('background-image', 'url(/assets/ads/big-' + number + '.jpg?v=250724)');
