@@ -30,7 +30,6 @@
             background-repeat: no-repeat;
             background-size: cover;
             background-color: black;
-            cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
         }
@@ -68,6 +67,7 @@
             color: white;
             opacity: 0.8;
             font-size: 13px;
+            cursor: pointer;
             padding: 1px 5px 2px 5px;
             border-radius: 5px;
         }
@@ -93,7 +93,7 @@
 
 <body>
     <div class="wrapper">
-        <span class="marked">广告</span>
+        <span class="marked" title="点击切换">广告</span>
     </div>
     <footer>
         <p>总访问量: <span id="qiushaocloud_sitecounter_value_site_pv">n</span></p>
@@ -113,47 +113,61 @@
     <script src="/assets/js/api.min.js?v=2410121401"></script>
     <script>
         $(document).ready(function () {
-            var $wrapper = $('.wrapper'), random = function (min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
+            var $wrapper = $('.wrapper'), random = function (min, max, exclude) {
+                var number;
+                do {
+                    number = Math.floor(Math.random() * (max - min + 1)) + min;
+                } while (exclude && exclude.includes(number));
+                return number;
             }, where = params(), texts = [
                 { top: '平民零氪搬砖服', bottom: '装备全靠 打元宝能交易' },
                 { top: '复古零氪开荒版', bottom: '开 局 小 怪 爆 神 装' },
                 { top: '散人专属零氪服', bottom: '地图无门槛 打宝全自由' },
                 { top: '全新零氪打金版', bottom: '开 局 充 值 券 直 接 送' },
                 { top: '经典零氪怀旧服', bottom: '不用肝 轻松打宝爽不停' },
-            ], animations = ['jello-horizontal', 'bounce-top', 'blink-2', 'shake-top'];
-
-            if (where.type === 'big') { // 大图模式
-                var number = '00' + random(1, 4);
-                $wrapper.css('height', '100vh');
-                if (number <= 2) {
-                    $wrapper.css('background-image', 'url(/assets/ads/video-' + number + '.webp?v=250724), url(/assets/ads/big-' + number + '.jpg?v=250724)');
-                } else {
-                    $wrapper.css('background-image', 'url(/assets/ads/big-' + number + '.jpg?v=250724)');
-                }
-            } else if (where.type === 'text') { // 文案模式
-                var ads = document.createElement('div'),
-                    p = document.createElement('p'),
-                    text = texts[random(0, texts.length - 1)],
-                    animate = animations[random(0, animations.length - 1)];
-                ads.className = 'ads';
-                $wrapper.append(ads);
-                p.innerText = text.top;
-                ads.append(p);
-                p = document.createElement('p');
-                p.innerText = text.bottom;
-                p.className = animate;
-                ads.append(p);
-                p.addEventListener('animationend', function () {
-                    p.classList.remove(animate);
-                    setTimeout(function () {
+            ], animations = [
+                'jello-horizontal',
+                'bounce-top',
+                'blink-2',
+                'shake-top'
+            ], createAds = function (type, exclude) { // 创建广告
+                if (type === 'big') { // 大图模式
+                    adsIndex = random(1, 4, exclude);
+                    $wrapper.css('background-image', 'url(/assets/ads/video-' + ('00' + adsIndex) + '.webp?v=250724), url(/assets/ads/big-' + ('00' + adsIndex) + '.jpg?v=250724)');
+                } else if (type === 'text') { // 文案模式
+                    adsIndex = random(0, texts.length - 1, exclude);
+                    $('.ads').remove()
+                    var ads = document.createElement('div'),
+                        p = document.createElement('p'),
+                        text = texts[adsIndex],
                         animate = animations[random(0, animations.length - 1)];
-                        p.classList.add(animate);
-                    }, 5000);
-                });
-            } else { // 默认模式
-                $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + random(1, 4)) + '.jpg?v=250724)');
-            }
+                    ads.className = 'ads';
+                    $wrapper.append(ads);
+                    p.innerText = text.top;
+                    ads.append(p);
+                    p = document.createElement('p');
+                    p.innerText = text.bottom;
+                    p.className = animate;
+                    ads.append(p);
+                    p.addEventListener('animationend', function () {
+                        p.classList.remove(animate);
+                        setTimeout(function () {
+                            animate = animations[random(0, animations.length - 1)];
+                            p.classList.add(animate);
+                        }, 5000);
+                    });
+                } else { // 默认模式
+                    adsIndex = random(1, 4, exclude);
+                    $wrapper.css('background-image', 'url(/assets/ads/' + ('00' + adsIndex) + '.jpg?v=250724)');
+                }
+            }, adsIndex = 1;
+
+            createAds(where.type, []);
+            // 更换广告
+            $('.marked').click(function () {
+                createAds(where.type, [adsIndex]);
+            });
+            // 查看流量
             $wrapper.dblclick(function () {
                 $('footer').css('display', 'flex');
             });
