@@ -133,6 +133,7 @@
             ], createAds = function (type, exclude) { // 创建广告
                 if (type === 'big') { // 大图模式
                     adsIndex = random(1, 4, exclude);
+                    $wrapper.css('height', '100vh');
                     $wrapper.css('background-image', 'url(/assets/ads/video-' + ('00' + adsIndex) + '.webp?v=250724), url(/assets/ads/big-' + ('00' + adsIndex) + '.jpg?v=250724)');
                 } else if (type === 'text') { // 文案模式
                     adsIndex = random(0, texts.length - 1, exclude);
