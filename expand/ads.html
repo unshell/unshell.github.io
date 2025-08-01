@@ -111,6 +111,9 @@
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script src="/assets/js/api.min.js?v=2410121401"></script>
     <script>
+        window.onload = function () {
+            window.parent.postMessage({ app: 'fish-ads-app', type: 'loaded' }, '*')
+        }
         $(document).ready(function () {
             var $wrapper = $('.wrapper'), random = function (min, max, exclude) {
                 var number;
