@@ -106,13 +106,35 @@
         <p>本页面今日访问量: <span id="qiushaocloud_sitecounter_value_today_site_page_pv">n</span></p>
         <p>本页面今日访客量: <span id="qiushaocloud_sitecounter_value_today_site_page_uv">n</span></p>
     </footer>
-    <script async src="//githubcdn.qiushaocloud.top/gh/qiushaocloud/site-counter@master/dist/qiushaocloud_site_counter.min.js"></script>
+    <script src="//githubcdn.qiushaocloud.top/gh/qiushaocloud/site-counter@master/dist/qiushaocloud_site_counter.min.js" async></script>
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script src="/assets/js/api.min.js?v=2410121401"></script>
     <script>
         window.onload = function () {
             window.parent.postMessage({ app: 'fish-ads-app', type: 'loaded' }, '*')
+
+            var interval = 100, timeout = interval * 300, timer = setInterval(() => {
+                if (timeout <= 0) { // 超时停止
+                    timer && clearInterval(timer)
+                } else {
+                    var $hot = $('#qiushaocloud_sitecounter_value_today_site_page_pv'),
+                        $member = $('#qiushaocloud_sitecounter_value_today_site_page_uv'),
+                        hot = $hot.text(),
+                        member = $member.text();
+
+                    if (!isNaN(hot)) {
+                        window.parent.postMessage({
+                            app: 'fish-ads-app', type: 'counter', counter: {
+                                member: $('#qiushaocloud_sitecounter_value_today_site_page_uv').text(),
+                                hot: $('#qiushaocloud_sitecounter_value_today_site_page_pv').text(),
+                            }
+                        }, '*')
+                        timer && clearInterval(timer)
+                    }
+                    timeout -= interval
+                }
+            }, interval)
         }
         $(document).ready(function () {
             var $wrapper = $('.wrapper'), random = function (min, max, exclude) {
