@@ -27,6 +27,12 @@
             <!-- 仓库 -->
             <div class="stores hide" data-legend="仓库（0 / 5）"></div>
         </div>
+        <audio id="bgm" autoplay loop>
+            <source src="./audio/海浪.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="action" autoplay>
+            <!-- <source src="./audio/呼吸.mp3" type="audio/mpeg"> -->
+        </audio>
     </div>
     <script src="./lib/jquery-4.0.0.min.js"></script>
     <script src="./script/button.js"></script>
@@ -43,6 +49,8 @@
                         _begin.hide();
                         $('.content').show();
 
+                        playAudio(0);
+
                         notify.createByList(0, function () {
                             let walk = btn.init({
                                 text: '到处逛逛',
@@ -50,6 +58,7 @@
                                     walk.remove();
                                     // 初始化卡牌
                                     PALM.cards = card.init(false);
+                                    playAudio(1);
 
                                     // 初始化操作
                                     notify.list = [
@@ -74,6 +83,19 @@
             $(_stores).on('click', '.item', function () {
                 $(this).toggleClass('selected');
             });
+
+            function playAudio(type) {
+                let audio = document.getElementById('action');
+                audio.src = {
+                    0: './audio/呼吸.mp3',
+                    1: './audio/走路.mp3',
+                    2: './audio/收拾.mp3',
+                    3: './audio/建造.mp3'
+                }[type]
+                audio.load();
+                audio.currentTime = 0;
+                audio.play();
+            }
 
             function reloadStores() {
                 if (!PALM.stores) return;
@@ -167,7 +189,7 @@
                                 }
                             ];
                             if (PALM.cards[0].min === PALM.cards[0].max) {
-                                notify.push({
+                                notify.list.push({
                                     text: '你隐约感觉有什么事情要来了.',
                                     duration: 2000
                                 });
@@ -185,6 +207,7 @@
                                 duration: 1000
                             }
                         ];
+                        playAudio(1);
                         notify.createByList(0, nextRound);
                     }
                 }
@@ -336,6 +359,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
+                                playAudio(3);
                                 notify.createByList(0, next);
                             } else {
                                 notify.list.push({
@@ -438,6 +462,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
+                                playAudio(3);
                                 notify.createByList(0, next);
                             } else {
                                 notify.list.push({
@@ -519,6 +544,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
+                                playAudio(2);
                                 today.save = true;
                                 notify.createByList(0, next);
                             } else {
@@ -553,6 +579,7 @@
                                 });
                                 return false;
                             }
+                            playAudio(2);
                             today.save = true;
                             PALM.stores = true;
 
