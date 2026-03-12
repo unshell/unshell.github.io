@@ -233,8 +233,8 @@
                                 return false;
                             }
                             selected = PALM.cards.filter(item => selected.includes(item.id));
-                            for (let i = 0; i < resources.length; i++) {
-                                resources[i].save = false;
+                            for (let i = 0; i < selected.length; i++) {
+                                selected[i].save = false;
                             }
                             notify.list = [{
                                 text: '仓库的位置空了出来.',
