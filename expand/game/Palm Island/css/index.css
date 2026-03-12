@@ -1,0 +1,168 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+body,
+p,
+button {
+    padding: 0;
+    margin: 0;
+    user-select: none;
+}
+
+.hide {
+    display: none;
+}
+
+.wrapper {
+    width: 700px;
+    margin: auto;
+}
+
+.begin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.begin p {
+    font-size: 24px;
+    letter-spacing: 1em;
+    padding-left: 1em;
+    margin-bottom: 20px;
+}
+
+.begin button {
+    margin-bottom: 10px;
+}
+
+.content {
+    position: relative;
+    margin-top: 20px;
+}
+
+.content .notifications {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 700px;
+    width: 200px;
+    overflow: hidden;
+}
+
+.notifications #notifyGradient {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
+.content .operations {
+    position: absolute;
+    top: 0px;
+    left: 220px;
+}
+
+.operations .round {
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+
+.round .current {
+    text-decoration: underline;
+}
+
+.round span {
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.round span::before {
+    position: relative;
+    left: -5px;
+    content: '>';
+}
+
+.round .current::before {
+    content: '';
+}
+
+.operations button {
+    margin-bottom: 10px;
+    min-width: 100px;
+    display: block;
+}
+
+.content .star {
+    position: absolute;
+    right: 0;
+    font-weight: bold;
+}
+
+.content .stores {
+    position: absolute;
+    top: 45px;
+    right: 0px;
+    border: 1px solid #000;
+    padding: 10px;
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.stores .item {
+    padding: 5px 2px;
+    cursor: pointer;
+}
+
+.stores .item.selected {
+    background-color: #eee;
+}
+
+.stores::before {
+    position: absolute;
+    background: white;
+    content: attr(data-legend);
+    left: 8px;
+    top: -15px;
+}
+
+button {
+    position: relative;
+    background-color: transparent;
+    border-color: #999;
+    padding: 2px 5px;
+}
+
+button.tooltip::before {
+    position: absolute;
+    top: 25px;
+    left: -65px;
+    width: 230px;
+    text-align: center;
+    border: 1px solid black;
+    box-shadow: -1px 3px 2px #666;
+    content: attr(data-tooltip);
+    background: white;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 4px 4px 6px 4px;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+button:hover {
+    background-color: #eee;
+    cursor: pointer;
+}
+
+button.tooltip:hover::before {
+    opacity: 1;
+    z-index: 1997;
+}
