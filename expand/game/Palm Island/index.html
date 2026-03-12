@@ -27,12 +27,11 @@
             <!-- 仓库 -->
             <div class="stores hide" data-legend="仓库（0 / 5）"></div>
         </div>
+        <!-- 背景音乐 -->
         <audio id="bgm" autoplay loop>
             <source src="./audio/海浪.mp3" type="audio/mpeg">
         </audio>
-        <audio id="action" autoplay>
-            <!-- <source src="./audio/呼吸.mp3" type="audio/mpeg"> -->
-        </audio>
+        <audio id="action" autoplay></audio>
     </div>
     <script src="./lib/jquery-4.0.0.min.js"></script>
     <script src="./script/button.js"></script>
@@ -42,13 +41,14 @@
         $(document).ready(function () {
             window.PALM = {};
             var _begin = $('.begin'), _operations = $('.operations'),
-                _stores = $('.stores'), _star = $('.star'),
+                _stores = $('.stores'), _star = $('.star'), _bgm = document.getElementById('bgm'),
                 start = btn.init({
                     text: '开始游戏',
                     click: function () {
                         _begin.hide();
                         $('.content').show();
 
+                        _bgm.muted = true;
                         playAudio(0);
 
                         notify.createByList(0, function () {
@@ -90,7 +90,8 @@
                     0: './audio/呼吸.mp3',
                     1: './audio/走路.mp3',
                     2: './audio/收拾.mp3',
-                    3: './audio/建造.mp3'
+                    3: './audio/建造.mp3',
+                    4: './audio/叹气.mp3'
                 }[type]
                 audio.load();
                 audio.currentTime = 0;
@@ -140,6 +141,7 @@
                             _operations.html('');
                             _stores.hide();
                             _star.hide();
+                            _bgm.muted = false;
                             notify.list = [
                                 {
                                     text: '你放眼望去，海面上好像出现了一艘渔船.',
@@ -207,7 +209,6 @@
                                 duration: 1000
                             }
                         ];
-                        playAudio(1);
                         notify.createByList(0, nextRound);
                     }
                 }
@@ -220,6 +221,7 @@
                     tooltip: `失去一次行动机会，${tomorrow.content ? ('直接前往' + tomorrow.name) : '直接前往下一个场景'}`,
                     click: function () {
                         _operations.find('button').attr('disabled', true);
+                        playAudio(4);
                         next();
                     }
                 });
