@@ -23,8 +23,7 @@ const card = {
                 {
                     get: { wood: 1, fish: 2 }
                 }
-            ],
-            level: 1
+            ]
         },
         quarry: {
             number: 3,
@@ -47,8 +46,7 @@ const card = {
                     get: { stone: 2 },
                     build: 2
                 }
-            ],
-            level: 1
+            ]
         },
         trade_house: {
             number: 1,
@@ -89,8 +87,7 @@ const card = {
                     flip: { stone: 1 },
                     rotate: { stone: 1 }
                 }
-            ],
-            level: 1
+            ]
         },
         logger: {
             number: 3,
