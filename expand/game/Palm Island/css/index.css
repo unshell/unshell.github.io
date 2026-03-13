@@ -39,6 +39,14 @@ button {
     margin-bottom: 10px;
 }
 
+.begin .record {
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
+}
+
 .content {
     position: relative;
     margin-top: 20px;

@@ -14,6 +14,7 @@
         <div class="begin">
             <img src="./img/logo.png" alt="logo">
             <p>棕榈岛</p>
+            <span class="record"></span>
         </div>
         <div class="content hide">
             <!-- 通知 -->
@@ -28,10 +29,10 @@
             <div class="stores hide" data-legend="仓库（0 / 5）"></div>
         </div>
         <!-- 背景音乐 -->
-        <audio id="bgm" autoplay loop>
+        <audio id="bgm" loop>
             <source src="./audio/海浪.mp3" type="audio/mpeg">
         </audio>
-        <audio id="action" autoplay></audio>
+        <audio id="action"></audio>
     </div>
     <script src="./lib/jquery-4.0.0.min.js"></script>
     <script src="./script/button.js"></script>
@@ -39,6 +40,10 @@
     <script src="./script/card.js"></script>
     <script>
         $(document).ready(function () {
+            let record = localStorage.getItem('record') || 0;
+            if (record > 0) {
+                $('.record').html(`最高记录：${record} 分`);
+            }
             window.PALM = {};
             var _begin = $('.begin'), _operations = $('.operations'),
                 _stores = $('.stores'), _star = $('.star'), _bgm = document.getElementById('bgm'),
@@ -48,8 +53,9 @@
                         _begin.hide();
                         $('.content').show();
 
-                        _bgm.muted = true;
-                        playAudio(0);
+                        _bgm.volume = 0.5;
+                        _bgm.play();
+                        playAudio('呼吸');
 
                         notify.createByList(0, function () {
                             let walk = btn.init({
@@ -58,7 +64,8 @@
                                     walk.remove();
                                     // 初始化卡牌
                                     PALM.cards = card.init(false);
-                                    playAudio(1);
+                                    _bgm.muted = true;
+                                    playAudio('走路');
 
                                     // 初始化操作
                                     notify.list = [
@@ -84,15 +91,9 @@
                 $(this).toggleClass('selected');
             });
 
-            function playAudio(type) {
+            function playAudio(name) {
                 let audio = document.getElementById('action');
-                audio.src = {
-                    0: './audio/呼吸.mp3',
-                    1: './audio/走路.mp3',
-                    2: './audio/收拾.mp3',
-                    3: './audio/建造.mp3',
-                    4: './audio/叹气.mp3'
-                }[type]
+                audio.src = `./audio/${name}.mp3`
                 audio.load();
                 audio.currentTime = 0;
                 audio.play();
@@ -160,21 +161,38 @@
                                     duration: 2000
                                 }
                             ];
-                            notify.createByList(0, function () {
-                                let result = ['仍需努力', '值得尊敬', '超乎寻常', '令人震惊'];
-                                if (PALM.star < 19) {
-                                    result = result[0];
-                                } else if (PALM.star < 29) {
-                                    result = result[1];
-                                } else if (PALM.star < 39) {
-                                    result = result[2];
-                                } else {
-                                    result = result[3];
-                                }
-                                // 结算分数
-                                alert(`你最终得分：${PALM.star} 分，${result}！`);
-                                location.reload();
+                            let star = PALM.star || 0, comment = {
+                                19: '仍需努力', 29: '值得尊敬', 39: '超乎寻常', 50: '令人震惊', 55: '不可思议'
+                            };
+                            for (const key in comment) {
+                                if (star > key) continue;
+                                comment = comment[key];
+                                break;
+                            }
+                            // 结算分数
+                            notify.list.push({
+                                text: `你最终得分：${star} 分，${comment}！`,
+                                duration: 2000
                             });
+                            let record = localStorage.getItem('record') || 0;
+                            if (star > record) {
+                                localStorage.setItem('record', star);
+                                notify.list.push({
+                                    text: '恭喜你，新纪录！',
+                                    duration: 1000
+                                });
+                            }
+                            notify.createByList(0, function () {
+                                let again = btn.init({
+                                    text: '再来一局',
+                                    click: function () {
+                                        location.reload();
+                                        return false;
+                                    }
+                                });
+                                _operations.prepend(again);
+                            });
+                            return false;
                         } else {
                             notify.list = [
                                 {
@@ -221,7 +239,7 @@
                     tooltip: `失去一次行动机会，${tomorrow.content ? ('直接前往' + tomorrow.name) : '直接前往下一个场景'}`,
                     click: function () {
                         _operations.find('button').attr('disabled', true);
-                        playAudio(4);
+                        playAudio('走路');
                         next();
                     }
                 });
@@ -361,7 +379,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
-                                playAudio(3);
+                                playAudio('建造');
                                 notify.createByList(0, next);
                             } else {
                                 notify.list.push({
@@ -464,7 +482,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
-                                playAudio(3);
+                                playAudio('建造');
                                 notify.createByList(0, next);
                             } else {
                                 notify.list.push({
@@ -546,7 +564,7 @@
                                 for (let k = 0; k < selected.length; k++) {
                                     selected[k].save = false;
                                 }
-                                playAudio(2);
+                                playAudio('收拾');
                                 today.save = true;
                                 notify.createByList(0, next);
                             } else {
@@ -581,7 +599,7 @@
                                 });
                                 return false;
                             }
-                            playAudio(2);
+                            playAudio('收拾');
                             today.save = true;
                             PALM.stores = true;
 
