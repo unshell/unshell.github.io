@@ -1,0 +1,27 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+body,
+p,
+span,
+button {
+    padding: 0;
+    margin: 0;
+    user-select: none;
+}
+
+.wrapper {
+    background-color: #eee;
+    height: 100vh;
+}
+
+.box {
+    width: 600px;
+    margin: auto;
+    color: #eee;
+    background-color: #333;
+}

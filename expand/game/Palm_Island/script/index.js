@@ -1,0 +1,582 @@
+let record = localStorage.getItem('record') || 0;
+if (record > 0) {
+    $('.record').html(`最高记录：${record} 分`);
+}
+window.PALM = {};
+var _begin = $('.begin'), _operations = $('.operations'),
+    _stores = $('.stores'), _star = $('.star'), _bgm = document.getElementById('bgm'),
+    start = btn.init({
+        text: '开始游戏',
+        click: function () {
+            _begin.hide();
+            $('.content').show();
+
+            _bgm.volume = 0.5;
+            _bgm.play();
+            playAudio('呼吸');
+
+            notify.createByList(0, function () {
+                let walk = btn.init({
+                    text: '到处逛逛',
+                    click: function () {
+                        walk.remove();
+                        // 初始化卡牌
+                        PALM.cards = card.init(false);
+                        _bgm.muted = true;
+                        playAudio('走路');
+
+                        // 初始化操作
+                        notify.list = [
+                            {
+                                text: '你走了一圈.',
+                                duration: 2000
+                            },
+                            {
+                                text: `发现这里是${PALM.cards[0].name}，能做些什么呢?`,
+                                duration: 1000
+                            }
+                        ];
+                        notify.createByList(0, nextRound);
+                    }
+                });
+                _operations.prepend(walk);
+            });
+        }
+    });
+
+_begin.append(start);
+$(_stores).on('click', '.item', function () {
+    $(this).toggleClass('selected');
+});
+
+function playAudio(name) {
+    let audio = document.getElementById('action');
+    audio.src = `./audio/${name}.mp3`
+    audio.load();
+    audio.currentTime = 0;
+    audio.play();
+}
+
+function reloadStores() {
+    if (!PALM.stores) return;
+    let resources = PALM.cards.filter(item => item.save), elements = [];
+    _stores.show().attr('data-legend', `仓库（${resources.length} / 5）`);
+    if (PALM.star > 0) {
+        _star.show().html(`总分：${PALM.star}`);
+    }
+    for (let i = 0; i < PALM.cards.length; i++) {
+        let _that = PALM.cards[i];
+        if (!_that.save) continue;
+        if (i === 0) {
+            notify.list = [
+                {
+                    text: '仓库有东西不见了.',
+                    duration: 500
+                }
+            ];
+            notify.createByList(0, function () {
+                _that.save = false;
+            });
+            continue;
+        }
+        elements.push(`<p class="item" data-id="${_that.id}">（${i}）${card.toText(_that.content[_that.level].get)}</p>`)
+    }
+    _stores.html(elements.join(''));
+}
+
+function nextRound() {
+    let today = PALM.cards[0], tomorrow = PALM.cards[1];
+    if (today.content !== undefined && today.level === undefined) {
+        today.level = 0;
+    }
+    reloadStores();
+
+    const content = today.content[today.level], next = function () {
+        const first = PALM.cards.shift();
+        PALM.cards.push(first);
+        if (PALM.cards[0].content === undefined) {
+            PALM.cards[0].min++;
+            if (PALM.cards[0].min > PALM.cards[0].max) {
+                _operations.html('');
+                _stores.hide();
+                _star.hide();
+                _bgm.muted = false;
+                notify.list = [
+                    {
+                        text: '你放眼望去，海面上好像出现了一艘渔船.',
+                        duration: 2000
+                    },
+                    {
+                        text: '你挥手大喊.',
+                        duration: 1000
+                    },
+                    {
+                        text: '唉~',
+                        duration: 2000
+                    },
+                    {
+                        text: '刺眼的阳光让你分不清这是梦还是现实了.',
+                        duration: 2000
+                    }
+                ];
+                let star = PALM.star || 0, comment = {
+                    19: '仍需努力', 29: '值得尊敬', 39: '超乎寻常', 50: '令人震惊', 55: '不可思议'
+                };
+                for (const key in comment) {
+                    if (star > key) continue;
+                    comment = comment[key];
+                    break;
+                }
+                // 结算分数
+                notify.list.push({
+                    text: `你最终得分：${star} 分，${comment}！`,
+                    duration: 2000
+                });
+                let record = localStorage.getItem('record') || 0;
+                if (star > record) {
+                    localStorage.setItem('record', star);
+                    notify.list.push({
+                        text: '恭喜你，新纪录！',
+                        duration: 1000
+                    });
+                }
+                notify.createByList(0, function () {
+                    let again = btn.init({
+                        text: '再来一局',
+                        click: function () {
+                            location.reload();
+                            return false;
+                        }
+                    });
+                    _operations.prepend(again);
+                });
+                return false;
+            } else {
+                notify.list = [
+                    {
+                        text: '时间过得很快，已经是深夜了.',
+                        duration: 2000
+                    },
+                    {
+                        text: '睡了个好觉.',
+                        duration: 1000
+                    },
+                    {
+                        text: '你起了个大早.',
+                        duration: 2000
+                    }
+                ];
+                if (PALM.cards[0].min === PALM.cards[0].max) {
+                    notify.list.push({
+                        text: '你隐约感觉有什么事情要来了.',
+                        duration: 2000
+                    });
+                }
+                notify.createByList(0, next);
+            }
+        } else {
+            notify.list = [
+                {
+                    text: '兜兜转转.',
+                    duration: 2000
+                },
+                {
+                    text: `你发现前面是${PALM.cards[0].name}，能做些什么呢?`,
+                    duration: 1000
+                }
+            ];
+            notify.createByList(0, nextRound);
+        }
+    }
+
+    // 清空操作
+    _operations.html('');
+
+    let nothing = btn.init({
+        text: '忽视离开',
+        tooltip: `失去一次行动机会，${tomorrow.content ? ('直接前往' + tomorrow.name) : '直接前往下一个场景'}`,
+        click: function () {
+            _operations.find('button').attr('disabled', true);
+            playAudio('走路');
+            next();
+        }
+    });
+    _operations.prepend(nothing);
+    if (PALM.stores) {
+        let nothing = btn.init({
+            text: '清理仓库',
+            tooltip: '有时候取舍是必须的，留下什么就会有其他东西失去',
+            click: function () {
+                _operations.find('button').attr('disabled', true);
+                let selected = [], resources = PALM.cards.filter(item => item.save);
+                $.each(_stores.find('.selected'), function (_, item) {
+                    selected.push(item.getAttribute('data-id'));
+                });
+                if (selected.length <= 0) {
+                    if (resources.length > 0) {
+                        notify.list = [
+                            {
+                                text: '选择仓库的资源丢弃.',
+                                duration: 500
+                            }
+                        ];
+                    } else {
+                        notify.list = [
+                            {
+                                text: '你什么也没有.',
+                                duration: 500
+                            }
+                        ];
+                    }
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                    return false;
+                }
+                selected = PALM.cards.filter(item => selected.includes(item.id));
+                for (let i = 0; i < selected.length; i++) {
+                    selected[i].save = false;
+                }
+                notify.list = [{
+                    text: '仓库的位置空了出来.',
+                    duration: 500
+                }];
+                notify.createByList(0, function () {
+                    reloadStores();
+                    _operations.find('button').attr('disabled', false);
+                });
+                return false;
+            }
+        });
+        _operations.prepend(nothing);
+    }
+    if (content.flip) {
+        let tooltip = `消耗：${card.toText(content.flip)}\n---------------转型后---------------`,
+            nextLevel = today.content[{
+                0: 2,
+                1: 3,
+                2: 0,
+                3: 1
+            }[today.level]];
+        if (nextLevel.get) {
+            tooltip += `\n资源变更：${card.toText(nextLevel.get)}`;
+        }
+        if (nextLevel.build) {
+            tooltip += `\n得分 + ${nextLevel.build}`;
+        }
+        let flip = btn.init({
+            text: '转型建筑',
+            tooltip: tooltip,
+            click: function () {
+                _operations.find('button').attr('disabled', true);
+                let selected = [], resources = PALM.cards.filter(item => item.save);
+                $.each(_stores.find('.selected'), function (_, item) {
+                    selected.push(item.getAttribute('data-id'));
+                });
+                if (selected.length <= 0) {
+                    if (resources.length > 0) {
+                        notify.list = [
+                            {
+                                text: '选择仓库的资源，进行转型.',
+                                duration: 500
+                            }
+                        ];
+                    } else {
+                        notify.list = [
+                            {
+                                text: '你什么也没有.',
+                                duration: 500
+                            }
+                        ];
+                    }
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                    return;
+                }
+                selected = PALM.cards.filter(item => selected.includes(item.id));
+                let all = {}, enough = true, more = false;
+                for (var i = 0; i < selected.length; i++) {
+                    let _that = selected[i], _get = _that.content[_that.level].get;
+                    for (const key in _get) {
+                        all[key] = all[key] != undefined ? (all[key] + _get[key]) : _get[key];
+                    }
+                }
+                for (const key in content.flip) {
+                    if (all[key] === undefined) {
+                        enough = false;
+                        break;
+                    }
+                    if (all[key] < content.flip[key]) {
+                        enough = false;
+                        break;
+                    }
+                    if (all[key] > content.flip[key]) {
+                        more = true;
+                    }
+                }
+                notify.list = [];
+                if (enough) {
+                    notify.list.push({
+                        text: `${today.name}转型成功.`,
+                        duration: 1000
+                    });
+                    today.level = {
+                        0: 2,
+                        1: 3,
+                        2: 0,
+                        3: 1
+                    }[today.level];
+                    if (today.content[today.level].build) {
+                        notify.list.push({
+                            text: `得分 + ${today.content[today.level].build}.`,
+                            duration: 1000
+                        });
+                        PALM.star = PALM.star ? PALM.star + today.content[today.level].build : today.content[today.level].build;
+                    }
+                    for (let k = 0; k < selected.length; k++) {
+                        selected[k].save = false;
+                    }
+                    playAudio('建造');
+                    notify.createByList(0, next);
+                } else {
+                    notify.list.push({
+                        text: `转型所需要的资源还不够.`,
+                        duration: 500
+                    });
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                }
+                return false;
+            }
+        });
+        _operations.prepend(flip);
+    }
+    if (content.rotate) {
+        let tooltip = `消耗：${card.toText(content.rotate)}\n---------------升级后---------------`,
+            nextLevel = today.content[{
+                0: 1,
+                1: 0,
+                2: 3,
+                3: 2
+            }[today.level]];
+        if (nextLevel.get) {
+            tooltip += `\n资源变更：${card.toText(nextLevel.get)}`;
+        }
+        if (nextLevel.build) {
+            tooltip += `\n得分 + ${nextLevel.build}`;
+        }
+        let rotate = btn.init({
+            text: '升级建筑',
+            tooltip: tooltip,
+            click: function () {
+                _operations.find('button').attr('disabled', true);
+                let selected = [], resources = PALM.cards.filter(item => item.save);
+                $.each(_stores.find('.selected'), function (_, item) {
+                    selected.push(item.getAttribute('data-id'));
+                });
+                if (selected.length <= 0) {
+                    if (resources.length > 0) {
+                        notify.list = [
+                            {
+                                text: '选择仓库的资源，进行升级.',
+                                duration: 500
+                            }
+                        ];
+                    } else {
+                        notify.list = [
+                            {
+                                text: '你什么也没有.',
+                                duration: 500
+                            }
+                        ];
+                    }
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                    return false;
+                }
+                selected = PALM.cards.filter(item => selected.includes(item.id));
+                let all = {}, enough = true, more = false;
+                for (var i = 0; i < selected.length; i++) {
+                    let _that = selected[i], _get = _that.content[_that.level].get;
+                    for (const key in _get) {
+                        all[key] = all[key] != undefined ? (all[key] + _get[key]) : _get[key];
+                    }
+                }
+                for (const key in content.rotate) {
+                    if (all[key] === undefined) {
+                        enough = false;
+                        break;
+                    }
+                    if (all[key] < content.rotate[key]) {
+                        enough = false;
+                        break;
+                    }
+                    if (all[key] > content.rotate[key]) {
+                        more = true;
+                    }
+                }
+                notify.list = [];
+                if (enough) {
+                    notify.list.push({
+                        text: `${today.name}升级成功.`,
+                        duration: 1000
+                    });
+                    today.level = {
+                        0: 1,
+                        1: 0,
+                        2: 3,
+                        3: 2
+                    }[today.level];
+                    if (today.content[today.level].build) {
+                        notify.list.push({
+                            text: `得分 + ${today.content[today.level].build}.`,
+                            duration: 1000
+                        });
+                        PALM.star = PALM.star ? PALM.star + today.content[today.level].build : today.content[today.level].build;
+                    }
+                    for (let k = 0; k < selected.length; k++) {
+                        selected[k].save = false;
+                    }
+                    playAudio('建造');
+                    notify.createByList(0, next);
+                } else {
+                    notify.list.push({
+                        text: `升级所需要的资源还不够.`,
+                        duration: 500
+                    });
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                }
+                return false;
+            }
+        });
+        _operations.prepend(rotate);
+    }
+    if (content.exchange) {
+        let exchange = btn.init({
+            text: '交易获得',
+            tooltip: `消耗：${card.toText(content.exchange)}\n获得：${card.toText(content.get)}`,
+            click: function () {
+                _operations.find('button').attr('disabled', true);
+                let selected = [], resources = PALM.cards.filter(item => item.save);
+                $.each(_stores.find('.selected'), function (_, item) {
+                    selected.push(item.getAttribute('data-id'));
+                });
+                if (selected.length <= 0) {
+                    if (resources.length > 0) {
+                        notify.list = [
+                            {
+                                text: '选择仓库的资源，进行交易.',
+                                duration: 500
+                            }
+                        ];
+                    } else {
+                        notify.list = [
+                            {
+                                text: '你什么也没有.',
+                                duration: 500
+                            }
+                        ];
+                    }
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                    return false;
+                }
+                selected = PALM.cards.filter(item => selected.includes(item.id));
+                let all = {}, enough = true, more = false;
+                for (var i = 0; i < selected.length; i++) {
+                    let _that = selected[i], _get = _that.content[_that.level].get;
+                    for (const key in _get) {
+                        all[key] = all[key] != undefined ? (all[key] + _get[key]) : _get[key];
+                    }
+                }
+                for (let j = 0; j < content.exchange.length; j++) {
+                    enough = true; // 重制
+                    for (const key in content.exchange[j]) {
+                        if (all[key] === undefined) {
+                            enough = false;
+                            break;
+                        }
+                        if (all[key] < content.exchange[j][key]) {
+                            enough = false;
+                            break;
+                        }
+                        if (all[key] > content.exchange[j][key]) {
+                            more = true;
+                        }
+                    }
+                    if (enough) break;
+                }
+
+                notify.list = [];
+                if (enough) {
+                    notify.list.push({
+                        text: '物资来之不易.',
+                        duration: 1000
+                    });
+                    for (let k = 0; k < selected.length; k++) {
+                        selected[k].save = false;
+                    }
+                    playAudio('收拾');
+                    today.save = true;
+                    notify.createByList(0, next);
+                } else {
+                    notify.list.push({
+                        text: '交易所需要的资源还不够.',
+                        duration: 500
+                    });
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                }
+                return false;
+            }
+        });
+        _operations.prepend(exchange);
+    }
+    if (today.content[today.level].get && !today.content[today.level].exchange) {
+        let get = btn.init({
+            text: '免费获得',
+            tooltip: '获得：' + card.toText(content.get),
+            click: function () {
+                let resources = PALM.cards.filter(item => item.save);
+                if (resources.length >= 5) {
+                    notify.list = [
+                        {
+                            text: '仓库已经满了.',
+                            duration: 500
+                        }
+                    ];
+                    notify.createByList(0, function () {
+                        _operations.find('button').attr('disabled', false);
+                    });
+                    return false;
+                }
+                playAudio('收拾');
+                today.save = true;
+                PALM.stores = true;
+
+                _operations.find('button').attr('disabled', true);
+                notify.list = [
+                    {
+                        text: '物资来之不易.',
+                        duration: 1000
+                    }
+                ];
+                notify.createByList(0, next);
+                return false;
+            }
+        });
+        _operations.prepend(get);
+    }
+
+    _operations.prepend($(['<p class="round">',
+        `<span class="current">${today.name}（${today.content ? (today.level || 0) : today.min}）</span>`,
+        `<span>${tomorrow.name}（${tomorrow.content ? (tomorrow.level || 0) : tomorrow.min}）</span>`,
+        '</p>'].join('')));
+}

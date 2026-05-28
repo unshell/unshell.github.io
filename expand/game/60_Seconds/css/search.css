@@ -1,0 +1,24 @@
+.box {
+    padding: 5px;
+}
+
+.box p {
+    text-align: center;
+    background-color: #666;
+}
+
+.maps {
+    display: flex;
+    padding: 10px 0 5px 0;
+}
+
+.maps .item {
+    cursor: pointer;
+    padding: 0 3px;
+    margin-right: 10px;
+}
+
+.maps .item.active {
+    background-color: #666;
+    text-decoration: underline;
+}

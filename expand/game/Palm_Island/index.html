@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>棕榈岛</title>
+    <link rel="icon" href="./img/logo.png" type="image/png">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="begin">
+            <img src="./img/logo.png" alt="logo">
+            <p>棕榈岛</p>
+            <span class="record"></span>
+        </div>
+        <div class="content hide">
+            <!-- 通知 -->
+            <div class="notifications">
+                <div id="notifyGradient"></div>
+            </div>
+            <!-- 操作 -->
+            <div class="operations"></div>
+            <!-- 得分 -->
+            <div class="star hide"></div>
+            <!-- 仓库 -->
+            <div class="stores hide" data-legend="仓库（0 / 5）"></div>
+        </div>
+        <!-- 背景音乐 -->
+        <audio id="bgm" loop>
+            <source src="./audio/海浪.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="action"></audio>
+    </div>
+    <script src="./lib/jquery-4.0.0.min.js"></script>
+    <script src="./script/button.js"></script>
+    <script src="./script/notify.js"></script>
+    <script src="./script/card.js"></script>
+    <script src="./script/index.js"></script>
+</body>
+
+</html>

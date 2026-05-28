@@ -1,0 +1,471 @@
+body,
+div,
+p {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+}
+
+.wrapper {
+    margin: 0 auto;
+    width: 800px;
+}
+
+.box {
+    position: relative;
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+.box::before {
+    position: absolute;
+    background: white;
+    content: attr(data-legend);
+    padding: 0 5px;
+    left: 8px;
+    top: -15px;
+}
+
+.nav {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav li {
+    margin: 0 2px;
+    color: #666;
+}
+
+.nav li.link {
+    cursor: pointer;
+}
+
+.nav li.active {
+    color: #000;
+    text-decoration: underline;
+}
+
+.row {
+    display: flex;
+}
+
+.left {
+    width: 20%;
+    margin-right: 10px;
+}
+
+.right {
+    width: calc(80% - 10px);
+}
+
+.box[lucky-dog] p {
+    text-align: center;
+}
+
+.box[lucky-dog] p.property {
+    font-weight: bold;
+}
+
+#lottery {
+    display: flex;
+    justify-content: space-between;
+}
+
+.lottery {
+    border: 1px solid #000;
+    padding: 0 5px;
+    margin: 5px 0;
+    min-width: 100px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.lottery.disabled {
+    cursor: not-allowed;
+}
+
+.lottery.disabled:hover {
+    background-color: #fff;
+}
+
+.lottery.disabled p {
+    text-decoration: line-through;
+}
+
+.lottery:hover {
+    background-color: #eee;
+}
+
+.lottery p:first-child {
+    letter-spacing: 5px;
+    font-weight: bold;
+}
+
+#desktop .lottery p:first-child {
+    cursor: move;
+}
+
+#desktop .lottery p:last-child {
+    cursor: pointer;
+    position: absolute;
+    top: 24px;
+    background-color: #fff;
+}
+
+#desktop {
+    margin-top: 20px;
+    min-height: 300px;
+}
+
+#desktop .trash {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    height: 80px;
+    width: 80px;
+    text-align: center;
+    border: 1px solid #000;
+    clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 20% 100%);
+    background-color: #eee;
+}
+
+#tool {
+    margin-top: 20px;
+}
+
+#tool div {
+    display: inline-block;
+    border: 1px solid #000;
+    padding: 2px 5px 3px 5px;
+}
+
+#tool .fan {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 80px;
+    justify-content: space-around;
+
+    --after-color: #67c23a;
+    --after-width: 100%;
+}
+
+#tool .fan::after {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    content: '';
+    height: 2px;
+    width: var(--after-width);
+    background-color: var(--after-color);
+}
+
+#tool .fan span:first-child {
+    margin-right: 5px;
+}
+
+/* 无限循环旋转动画 */
+.rotate-loop {
+    /* 动画：名称 时长 线性 无限循环 */
+    animation: rotate 2s linear infinite;
+}
+
+/* 定义旋转动画 */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+        /* 开始角度 */
+    }
+
+    to {
+        transform: rotate(360deg);
+        /* 结束角度 */
+    }
+}
+
+/* 商城样式 */
+#shop {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.shop-item {
+    border: 1px solid #000;
+    padding: 10px;
+    min-width: 150px;
+    text-align: center;
+}
+
+.shop-item p:first-child {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.shop-item p:nth-child(2) {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.shop-item button {
+    margin-top: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+.shop-item button:hover:not(:disabled) {
+    background-color: #eee;
+}
+
+.shop-item button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.shop-item .buy-btn {
+    background-color: #67c23a;
+    color: #fff;
+    border-color: #67c23a;
+}
+
+.shop-item .buy-btn:hover:not(:disabled) {
+    background-color: #85ce61;
+}
+
+.shop-item .repair-btn {
+    background-color: #e6a23c;
+    color: #fff;
+    border-color: #e6a23c;
+}
+
+.shop-item .repair-btn:hover:not(:disabled) {
+    background-color: #ebb563;
+}
+
+/* 打工模块样式 */
+#work {
+    min-height: 400px;
+}
+
+.work-options {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+.work-item {
+    border: 1px solid #000;
+    padding: 15px;
+    text-align: center;
+    min-width: 150px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.work-item:hover:not(.locked) {
+    background-color: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.work-item.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #eee;
+}
+
+.work-item p:first-child {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.work-item p:nth-child(2) {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.work-item p:nth-child(3),
+.work-item p:nth-child(4) {
+    font-size: 14px;
+    color: #333;
+    margin: 3px 0;
+}
+
+.work-btn {
+    margin-top: 10px;
+    padding: 8px 20px;
+    cursor: pointer;
+    border: 1px solid #000;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.work-btn:hover:not(:disabled) {
+    background-color: #333;
+    color: #fff;
+}
+
+.work-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.back-btn {
+    margin-bottom: 10px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 1px solid #000;
+    background-color: #fff;
+}
+
+.back-btn:hover {
+    background-color: #eee;
+}
+
+/* 洗碗区域样式 */
+.dish-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+.plate {
+    width: 250px;
+    height: 250px;
+    border: 3px solid #ccc;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+    cursor: crosshair;
+}
+
+.plate::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px;
+    height: 180px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+}
+
+.stain {
+    position: absolute;
+    font-size: 14px;
+    color: #8b4513;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    transition: opacity 0.1s;
+}
+
+.stain:hover {
+    color: #a0522d;
+}
+
+.plate-complete {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    color: #67c23a;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* 送外卖区域样式 */
+.delivery-area {
+    padding: 20px;
+}
+
+.delivery-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delivery-map {
+    width: 400px;
+    height: 300px;
+    border: 2px solid #333;
+    background-color: #f0f0f0;
+    position: relative;
+    margin: 10px 0;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.delivery-point {
+    position: absolute;
+    font-size: 30px;
+    transform: translate(-50%, -50%);
+}
+
+.delivery-point.start {
+    left: 10%;
+    top: 50%;
+}
+
+.delivery-point.end {
+    left: 80%;
+    top: 50%;
+}
+
+.delivery-rider {
+    position: absolute;
+    font-size: 25px;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.delivery-obstacle {
+    position: absolute;
+    font-size: 25px;
+    transform: translate(-50%, -50%);
+}
+
+.delivery-instruction {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.delivery-complete {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #67c23a;
+    font-weight: bold;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.delivery-fail {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #f56c6c;
+    font-weight: bold;
+    background: rgba(255,255,255,0.9);
+    padding: 20px;
+    border-radius: 10px;
+}

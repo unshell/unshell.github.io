@@ -43,6 +43,8 @@ document.getElementById('room').innerHTML = ESCAPE.map.name;
 
 map.drawMap(ESCAPE.map.grids);
 
+notify.createByList(0);
+
 // 时间计时器
 setInterval(() => {
     if (ESCAPE.time.minute >= 24 * 60) {
@@ -121,6 +123,10 @@ document.addEventListener('keydown', (event) => {
                     humanStyle.left = leftInt + gridSize + 'px';
                     break;
             }
+        }
+
+        if (key === 'j') {
+            
         }
     }
 });

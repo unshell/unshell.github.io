@@ -55,10 +55,20 @@ button {
     margin-bottom: 3px;
 }
 
+.info .task {
+    margin: 3px 0;
+    height: 75px;
+    background-color: #333;
+}
+
+.task .item {
+    padding: 2px 5px;
+}
+
 .info .notify {
     position: relative;
     margin: 3px 0;
-    height: 200px;
+    height: 125px;
     background-color: #333;
     overflow: hidden;
 }
@@ -111,6 +121,35 @@ button {
     width: 24px;
     height: 24px;
     text-align: center;
+}
+
+.grid.talk::before {
+    position: absolute;
+    top: -40px;
+    left: -60px;
+    width: 140px;
+    font-size: 14px;
+    border-radius: 5px;
+    text-align: center;
+    content: attr(data-talk);
+    background-color: #333;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 4px 4px 6px 4px;
+    z-index: 1997;
+}
+
+.grid.talk::after{
+    content: "";
+    position: absolute;
+    bottom: 27px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #333;
 }
 
 .grid-enum-1 {

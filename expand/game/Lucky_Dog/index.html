@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸运儿</title>
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- 导航 -->
+        <ul class="nav"></ul>
+        <!-- 内容 -->
+        <div class="row">
+            <!-- 左侧 -->
+            <div class="left">
+                <div class="box" lucky-dog data-legend="(๑¯ω¯๑)"></div>
+            </div>
+            <!-- 右侧 -->
+            <div class="right" lottery>
+                <div class="box" id="lottery" data-legend="(๑╹◡╹)ﾉ `瞧一瞧，看一看啦`"></div>
+                <div class="box" id="desktop" data-legend="桌面" data-count="0" data-max="10">
+                    <div class="trash" title="把垃圾拖拽进来，保持桌面干净">垃圾桶</div>
+                </div>
+                <div class="box" id="tool" data-legend="工具" style="display: none;"></div>
+            </div>
+            <!-- 右侧 -->
+            <div class="right" style="display: none;" shop>
+                <div class="box" id="shop" data-legend="商店">
+                    敬请期待
+                </div>
+            </div>
+            <!-- 右侧 -->
+            <div class="right" style="display: none;" work>
+                <div class="box" id="work" data-legend="打工">
+                    敬请期待
+                </div>
+            </div>
+            <!-- 右侧 -->
+            <div class="right" style="display: none;" stock>
+                <div class="box" id="stock" data-legend="股市">
+                    敬请期待
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./lib/jquery-4.0.0.min.js"></script>
+    <script src="./script/lucky-dog.js"></script>
+    <script src="./script/lottery.js"></script>
+    <script src="./script/shop.js"></script>
+    <script src="./script/work.js"></script>
+    <script src="./script/index.js"></script>
+</body>
+
+</html>
