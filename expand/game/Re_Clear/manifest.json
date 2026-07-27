@@ -1,0 +1,19 @@
+{
+  "name": "消了又消 - 单词消除游戏",
+  "short_name": "消了又消",
+  "description": "边玩消除游戏边背单词，寓教于乐的单词学习助手",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f172a",
+  "theme_color": "#7c3aed",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
