@@ -3,10 +3,23 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>Neverending · 无限互动故事</title>
-    <script type="module" crossorigin src="/expand/game/neverending/assets/home-Dtn_ytMN.js"></script>
-    <link rel="modulepreload" crossorigin href="/expand/game/neverending/assets/wordsModal-CcuHvVUY.js">
-    <link rel="stylesheet" crossorigin href="/expand/game/neverending/assets/wordsModal-gy8DkG3C.css">
+    <title>Neverending · 无限互动故事</title>
+    <script>
+      // 首帧前确定主题，避免刷新闪白
+      (function () {
+        var t = 'auto';
+        try {
+          var raw = localStorage.getItem('neverending.settings');
+          if (raw) t = JSON.parse(raw).theme || 'auto';
+        } catch (e) {}
+        var light = t === 'light' ||
+          (t === 'auto' && window.matchMedia('(prefers-color-scheme: light)').matches);
+        document.documentElement.dataset.theme = light ? 'light' : 'dark';
+      })();
+    </script>
+    <script type="module" crossorigin src="/expand/game/neverending/assets/home-DLcWML1Y.js"></script>
+    <link rel="modulepreload" crossorigin href="/expand/game/neverending/assets/themeToggle-Bp4WceAT.js">
+    <link rel="stylesheet" crossorigin href="/expand/game/neverending/assets/themeToggle-BKSHEb8z.css">
   </head>
   <body>
     <div id="app"></div>
