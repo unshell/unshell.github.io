@@ -97,6 +97,7 @@
     </div>
     <footer>
         <p>当前在线: <span id="online_count">-</span> 人</p>
+        <p>今日最高在线: <span id="online_peak">-</span> 人</p>
         <p>连接状态: <span id="online_status">连接中...</span></p>
     </footer>
     <script src="/assets/libs/supabase.min.js"></script>
@@ -123,27 +124,62 @@
                 } catch (e) { }
             }
 
-            var client = supabase.createClient('https://tnnqujscikndjrvxtcds.supabase.co', 'sb_publishable_XPHE2UDMTOWe6iygcg_W5Q_J6-PYZPh', {
-                auth: { persistSession: false }
-            }), channel = client.channel('fish-ads-online', {
-                config: { presence: { key: uuid } }
-            });
+            var CHANNEL = 'fish-ads-online',
+                client = supabase.createClient('https://tnnqujscikndjrvxtcds.supabase.co', 'sb_publishable_XPHE2UDMTOWe6iygcg_W5Q_J6-PYZPh', {
+                    auth: { persistSession: false }
+                }), channel = client.channel(CHANNEL, {
+                    config: { presence: { key: uuid } }
+                }), joinedAt = Date.now(), count = 0, peak = 0, recorded = 0;
 
-            channel.on('presence', { event: 'sync' }, function () {
-                // 按 uuid 去重，同一用户开多个标签页只算一人
-                var count = Object.keys(channel.presenceState()).length;
+            function push() { // 回传格式不变：member=当前在线，hot=今日最高在线
                 $('#online_count').text(count);
-                // 消息格式与原来一致，member/hot 均为当前在线人数，有人进出时实时推送
+                $('#online_peak').text(peak);
                 window.parent.postMessage({
                     app: 'fish-ads-app', type: 'counter', counter: {
                         member: String(count),
-                        hot: String(count),
+                        hot: String(peak),
                     }
                 }, '*')
+            }
+            function track() {
+                channel.track({ uuid: uuid, joinedAt: joinedAt, peak: peak });
+            }
+
+            channel.on('presence', { event: 'sync' }, function () {
+                var state = channel.presenceState(), broadcast = 0;
+                count = Object.keys(state).length; // 按 uuid 去重，同一用户开多个标签页只算一人
+                for (var key in state) {
+                    state[key].forEach(function (entry) {
+                        if (entry.peak > broadcast) broadcast = entry.peak;
+                    });
+                }
+                if (count > recorded) { // 破纪录，写入数据库，返回库中最新峰值
+                    recorded = count;
+                    client.rpc('record_peak', { p_channel: CHANNEL, p_count: count }).then(function (res) {
+                        if (res.error || !res.data) return;
+                        recorded = Math.max(recorded, res.data);
+                        if (res.data > peak) {
+                            peak = res.data;
+                            track();
+                        }
+                        push();
+                    });
+                }
+                if (count > peak || broadcast > peak) { // 合并其他在线者广播的峰值
+                    peak = Math.max(peak, count, broadcast);
+                    track();
+                }
+                push();
             }).subscribe(function (status) {
                 if (status === 'SUBSCRIBED') {
                     $('#online_status').text('已连接');
-                    channel.track({ uuid: uuid, joinedAt: Date.now() });
+                    track();
+                    client.rpc('get_peak', { p_channel: CHANNEL }).then(function (res) { // 读取今日峰值
+                        if (res.error) return;
+                        peak = recorded = Math.max(peak, res.data || 0);
+                        track();
+                        push();
+                    });
                 } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
                     $('#online_status').text('连接断开');
                 }
