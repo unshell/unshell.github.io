@@ -96,46 +96,59 @@
         <span class="marked" title="点击切换">广告</span>
     </div>
     <footer>
-        <p>总访问量: <span id="qiushaocloud_sitecounter_value_site_pv">n</span></p>
-        <p>总访客量: <span id="qiushaocloud_sitecounter_value_site_uv">n</span></p>
-        <p>今日访问量: <span id="qiushaocloud_sitecounter_value_today_site_pv">n</span></p>
-        <p>今日访客量: <span id="qiushaocloud_sitecounter_value_today_site_uv">n</span></p>
-
-        <p>本页面总访问量: <span id="qiushaocloud_sitecounter_value_site_page_pv">n</span></p>
-        <p>本页面总访客量: <span id="qiushaocloud_sitecounter_value_site_page_uv">n</span></p>
-        <p>本页面今日访问量: <span id="qiushaocloud_sitecounter_value_today_site_page_pv">n</span></p>
-        <p>本页面今日访客量: <span id="qiushaocloud_sitecounter_value_today_site_page_uv">n</span></p>
+        <p>当前在线: <span id="online_count">-</span> 人</p>
+        <p>连接状态: <span id="online_status">连接中...</span></p>
     </footer>
-    <script src="//githubcdn.qiushaocloud.top/gh/qiushaocloud/site-counter@master/dist/qiushaocloud_site_counter.min.js" async></script>
+    <script src="/assets/libs/supabase.min.js"></script>
     <!-- JS部分 -->
     <script src="/assets/libs/jquery-3.7.1.min.js"></script>
     <script src="/assets/js/api.min.js?v=2410121401"></script>
     <script>
         window.onload = function () {
             window.parent.postMessage({ app: 'fish-ads-app', type: 'loaded' }, '*')
+        };
+        // 在线统计：Supabase Realtime Presence（与 re-clear 同一服务，独立频道互不影响）
+        ;(function () {
+            var uuid;
+            try {
+                uuid = localStorage.getItem('fish_ads_uuid');
+            } catch (e) { }
+            if (!uuid) {
+                uuid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0;
+                    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
+                });
+                try {
+                    localStorage.setItem('fish_ads_uuid', uuid);
+                } catch (e) { }
+            }
 
-            var interval = 100, timeout = interval * 300, timer = setInterval(() => {
-                if (timeout <= 0) { // 超时停止
-                    timer && clearInterval(timer)
-                } else {
-                    var $hot = $('#qiushaocloud_sitecounter_value_today_site_page_pv'),
-                        $member = $('#qiushaocloud_sitecounter_value_today_site_page_uv'),
-                        hot = $hot.text(),
-                        member = $member.text();
+            var client = supabase.createClient('https://tnnqujscikndjrvxtcds.supabase.co', 'sb_publishable_XPHE2UDMTOWe6iygcg_W5Q_J6-PYZPh', {
+                auth: { persistSession: false }
+            }), channel = client.channel('fish-ads-online', {
+                config: { presence: { key: uuid } }
+            });
 
-                    if (!isNaN(hot)) {
-                        window.parent.postMessage({
-                            app: 'fish-ads-app', type: 'counter', counter: {
-                                member: $('#qiushaocloud_sitecounter_value_today_site_page_uv').text(),
-                                hot: $('#qiushaocloud_sitecounter_value_today_site_page_pv').text(),
-                            }
-                        }, '*')
-                        timer && clearInterval(timer)
+            channel.on('presence', { event: 'sync' }, function () {
+                // 按 uuid 去重，同一用户开多个标签页只算一人
+                var count = Object.keys(channel.presenceState()).length;
+                $('#online_count').text(count);
+                // 消息格式与原来一致，member/hot 均为当前在线人数，有人进出时实时推送
+                window.parent.postMessage({
+                    app: 'fish-ads-app', type: 'counter', counter: {
+                        member: String(count),
+                        hot: String(count),
                     }
-                    timeout -= interval
+                }, '*')
+            }).subscribe(function (status) {
+                if (status === 'SUBSCRIBED') {
+                    $('#online_status').text('已连接');
+                    channel.track({ uuid: uuid, joinedAt: Date.now() });
+                } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+                    $('#online_status').text('连接断开');
                 }
-            }, interval)
-        }
+            });
+        })();
         $(document).ready(function () {
             var $wrapper = $('.wrapper'), random = function (min, max, exclude) {
                 var number;
